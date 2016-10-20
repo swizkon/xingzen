@@ -32,11 +32,8 @@ namespace WebAPIApplication.Services
             HttpResponseMessage response = new HttpResponseMessage();
             using(HttpClient client = new HttpClient())
             {
-                // client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic","YWRtaW46Y2hhbmdlaXQ=");
                 client.DefaultRequestHeaders.Accept.Add( new MediaTypeWithQualityHeaderValue("application/json"));
-                //  = new AuthenticationHeaderValue("Basic","YWRtaW46Y2hhbmdlaXQ=");
                 var res = await client.GetAsync("http://localhost:2113/streams/" + streamName + "?embed=tryharder");
-
                 response.Content = res.Content;
             }
 
