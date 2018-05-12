@@ -7,3 +7,42 @@
 <p>Use this area to provide additional information.</p>
 
 <img src="/transactions/qrcode?data=JOnas" />
+
+
+@section scripts {
+
+    <script>
+
+    var connection;
+
+    $(document).ready(function(){
+
+          connection = $.connection('/signalr/hubs');
+
+          console.log(connection);
+            /*
+          connection.client.on('send', data => {
+              console.log("send: " + data);
+          });
+
+          connection.on('move', (racer, x, y) => {
+          });
+          */
+
+          connection.start().done(function() {
+                console.log("connection started!");
+            });
+
+          connection.start()
+              .then(() => {
+                  
+                connection.invoke('send', 'Hello from HubTest.vue');
+              });
+
+
+    });
+
+
+    </script>
+
+}

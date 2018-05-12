@@ -22,8 +22,7 @@ namespace sellerproto
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-
-            services.AddMemoryCache();
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -38,14 +37,17 @@ namespace sellerproto
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseStaticFiles();
-
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+            app.UseStaticFiles()
+                .UseMvc(routes =>
+                {
+                    routes.MapRoute(
+                        name: "default",
+                        template: "{controller=Home}/{action=Index}/{id?}");
+                })
+                .UseSignalR(routes =>
+                {
+                    routes.MapHub<Hubs.TransactionHub>("transactions");
+                });
         }
     }
 }
