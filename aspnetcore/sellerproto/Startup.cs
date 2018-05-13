@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Hubs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,14 +18,7 @@ namespace sellerproto
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddMvc();
-            services.AddSignalR();
-        }
+        public IConfiguration Configuration { get; set; }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -36,6 +31,19 @@ namespace sellerproto
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+            
+            var builder = new ConfigurationBuilder();
+            
+            if (env.IsDevelopment())
+            {
+                builder.SetBasePath(env.ContentRootPath)
+                        .AddJsonFile("appsettings.json", optional: true)
+                        .AddJsonFile("appsettings.local.json", optional: true)
+                        .AddJsonFile("appsettings.Development.json", optional: true)
+                        .AddEnvironmentVariables();
+            }
+
+            Configuration = builder.Build();
 
             app.UseStaticFiles()
                 .UseMvc(routes =>
@@ -46,8 +54,19 @@ namespace sellerproto
                 })
                 .UseSignalR(routes =>
                 {
-                    routes.MapHub<Hubs.TransactionHub>("transactions");
+                    routes.MapHub<TransactionHub>("transaction");
                 });
+        }
+        
+        
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
+        {
+            Console.WriteLine("ConfigureServices(IServiceCollection services)");
+            services.AddMvc();
+            services.AddSignalR();
+            
+            services.AddLogging();
         }
     }
 }

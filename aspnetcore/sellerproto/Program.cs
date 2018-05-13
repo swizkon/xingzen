@@ -19,6 +19,7 @@ namespace sellerproto
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseWebRoot(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"))
                 .UseStartup<Startup>()
                 .Build();
     }

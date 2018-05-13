@@ -9,7 +9,9 @@
 <img src="/transactions/qrcode?data=JOnas" />
 
 
+
 @section scripts {
+
 
     <script>
 
@@ -17,9 +19,9 @@
 
     $(document).ready(function(){
 
-          connection = $.connection('/signalr/hubs');
+          connection = new signalR.HubConnection('transaction', {}, {});
 
-          console.log(connection);
+          // console.log(connection);
             /*
           connection.client.on('send', data => {
               console.log("send: " + data);
@@ -33,11 +35,13 @@
                 console.log("connection started!");
             });
 
+            /*
           connection.start()
               .then(() => {
                   
                 connection.invoke('send', 'Hello from HubTest.vue');
               });
+              */
 
 
     });
