@@ -54,7 +54,7 @@ namespace sellerproto
                 })
                 .UseSignalR(routes =>
                 {
-                    routes.MapHub<TransactionHub>("transaction");
+                    routes.MapHub<TransactionHub>("/hubs/transaction");
                 });
         }
         
