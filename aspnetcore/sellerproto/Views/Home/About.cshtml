@@ -24,17 +24,24 @@
     .withUrl("/transactionHub")
     .configureLogging(signalR.LogLevel.Information)
     .build();
+
         //  new signalR.HubConnectionBuilder('hubs/transaction', {}, {});
           connection.on("SendMessage", function (sender, message) {
             console.log(sender + ': ' + message);
         });
+        
+          connection.on("Send", function (sender, message) {
+            console.log(sender + ': ' + message);
+        });
 
         connection.on("SendAction", function (sender, action) {
-            console.log(sender + ' ' + action);
+            console.log("SendAction:xcx " + sender + ' ' + action);
         });
             
           connection.start().then(function() {
                 console.log("connection started!");
+
+                connection.send('Send', 'Hello from HubTest.vue');
             });
             
     });
