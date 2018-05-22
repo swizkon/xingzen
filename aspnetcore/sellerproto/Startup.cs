@@ -45,16 +45,18 @@ namespace sellerproto
 
             Configuration = builder.Build();
 
-            app.UseStaticFiles()
-                .UseMvc(routes =>
+            app.UseStaticFiles();
+
+                app.UseSignalR(routes =>
+                {
+                    routes.MapHub<TransactionHub>("/transactionHub");
+                });
+
+            app.UseMvc(routes =>
                 {
                     routes.MapRoute(
                         name: "default",
                         template: "{controller=Home}/{action=Index}/{id?}");
-                })
-                .UseSignalR(routes =>
-                {
-                    routes.MapHub<TransactionHub>("/hubs/transaction");
                 });
         }
         

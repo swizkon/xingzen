@@ -18,32 +18,25 @@
     var connection;
 
     $(document).ready(function(){
+            // var c = new signalR.$
+            
+          connection = connection = new signalR.HubConnectionBuilder()
+    .withUrl("/transactionHub")
+    .configureLogging(signalR.LogLevel.Information)
+    .build();
+        //  new signalR.HubConnectionBuilder('hubs/transaction', {}, {});
+          connection.on("SendMessage", function (sender, message) {
+            console.log(sender + ': ' + message);
+        });
 
-          connection = new signalR.HubConnection('transaction', {}, {});
-
-          // console.log(connection);
-            /*
-          connection.client.on('send', data => {
-              console.log("send: " + data);
-          });
-
-          connection.on('move', (racer, x, y) => {
-          });
-          */
-
+        connection.on("SendAction", function (sender, action) {
+            console.log(sender + ' ' + action);
+        });
+            
           connection.start().then(function() {
                 console.log("connection started!");
             });
-
-            /*
-          connection.start()
-              .then(() => {
-                  
-                connection.invoke('send', 'Hello from HubTest.vue');
-              });
-              */
-
-
+            
     });
 
 
