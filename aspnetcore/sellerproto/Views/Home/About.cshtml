@@ -35,7 +35,7 @@
             });
             
             connection.on("PurchaseOrderRegistered", function (groupName, orderId, amount, currency) {
-                console.log("PurchaseOrderRegistered: " + groupName + ' ' + amount + ' ' + currency);
+                console.log("PurchaseOrderRegistered: " + groupName + ' ' + orderId + ' ' + amount + ' ' + currency);
             });
             
             connection.start().then(function() {

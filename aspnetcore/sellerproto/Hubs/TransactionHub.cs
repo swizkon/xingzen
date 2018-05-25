@@ -21,17 +21,9 @@ namespace Hubs
             return Clients.All.SendAsync("Send", message);
         }
 
-        /*
         public Task RegisterPurchaseOrder(string groupName, string orderId, decimal amount, string currency)
         {
-            return Clients.All.SendAsync("PurchaseOrderRegistered", groupName, orderId, amount, currency);
-        }
-        */
-
-        public Task RegisterPurchaseOrder(string groupName, string orderId, decimal amount, string currency)
-        {
-            Clients.Group(groupName).SendAsync("PurchaseOrderRegistered", groupName, orderId, amount, currency);
-            return Clients.All.SendAsync("PurchaseOrderRegistered", groupName, orderId, amount, currency);
+            return Clients.Group(groupName).SendAsync("PurchaseOrderRegistered", groupName, orderId, amount, currency);
         }
 
         public void Subscribe(string groupName)
@@ -43,6 +35,5 @@ namespace Hubs
         {
             return Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
         }
-
     }
 }
