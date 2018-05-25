@@ -1,17 +1,49 @@
 ﻿@{
-    ViewData["Title"] = "Contact";
+    ViewData["Title"] = "Numpad";
 }
 <h2>@ViewData["Title"]</h2>
 <h3>@ViewData["Message"]</h3>
+<h3>Store: @ViewData["Store"]</h3>
 
-<address>
-    One Microsoft Way<br />
-    Redmond, WA 98052-6399<br />
-    <abbr title="Phone">P:</abbr>
-    425.555.0100
-</address>
+<p>Use this area to provide additional information.</p>
 
-<address>
-    <strong>Support:</strong> <a href="mailto:Support@example.com">Support@example.com</a><br />
-    <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
-</address>
+<img src="/transactions/qrcode?data=JOnas" />
+
+@section scripts {
+    <script>
+
+    var store = '@ViewData["Store"]';
+    var connection;
+
+    $(document).ready(function(){
+        
+            connection = connection = new signalR.HubConnectionBuilder()
+                                                .withUrl("/transactionHub")
+                                                .configureLogging(signalR.LogLevel.Information)
+                                                .build();
+
+            connection.on("SendMessage", function (sender, message) {
+                console.log(sender + ': ' + message);
+            });
+            
+            connection.on("Send", function (message) {
+                console.log(message);
+            });
+
+            connection.on("SendAction", function (sender, action) {
+                console.log("SendAction: " + sender + ' ' + action);
+            });
+            
+            connection.on("PurchaseOrderRegistered", function (groupName, orderId, amount, currency) {
+                console.log("PurchaseOrderRegistered: " + groupName + ' ' + amount + ' ' + currency);
+            });
+            
+            connection.start().then(function() {
+                console.log("connection started!");
+
+                connection.send('RegisterPurchaseOrder', 'Store' + store, 'OrderId', 123, 'SEK');
+            });
+            
+    });
+    </script>
+}

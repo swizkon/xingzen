@@ -8,7 +8,7 @@ namespace Hubs
     {
         public override async Task OnConnectedAsync()
         {
-            await Clients.All.SendAsync("SendAction", Context.User.Identity.Name, "joined");
+            await Clients.All.SendAsync("SendAction", Context.ConnectionId, "joined");
         }
 
         public override async Task OnDisconnectedAsync(Exception ex)
@@ -21,8 +21,16 @@ namespace Hubs
             return Clients.All.SendAsync("Send", message);
         }
 
+        /*
         public Task RegisterPurchaseOrder(string groupName, string orderId, decimal amount, string currency)
         {
+            return Clients.All.SendAsync("PurchaseOrderRegistered", groupName, orderId, amount, currency);
+        }
+        */
+
+        public Task RegisterPurchaseOrder(string groupName, string orderId, decimal amount, string currency)
+        {
+            Clients.Group(groupName).SendAsync("PurchaseOrderRegistered", groupName, orderId, amount, currency);
             return Clients.All.SendAsync("PurchaseOrderRegistered", groupName, orderId, amount, currency);
         }
 

@@ -3,50 +3,48 @@
 }
 <h2>@ViewData["Title"]</h2>
 <h3>@ViewData["Message"]</h3>
+<h3>Store: @ViewData["Store"]</h3>
 
 <p>Use this area to provide additional information.</p>
 
 <img src="/transactions/qrcode?data=JOnas" />
 
-
-
 @section scripts {
-
-
     <script>
 
+    var store = '@ViewData["Store"]';
     var connection;
 
     $(document).ready(function(){
-            // var c = new signalR.$
-            
-          connection = connection = new signalR.HubConnectionBuilder()
-    .withUrl("/transactionHub")
-    .configureLogging(signalR.LogLevel.Information)
-    .build();
-
-        //  new signalR.HubConnectionBuilder('hubs/transaction', {}, {});
-          connection.on("SendMessage", function (sender, message) {
-            console.log(sender + ': ' + message);
-        });
         
-          connection.on("Send", function (sender, message) {
-            console.log(sender + ': ' + message);
-        });
+            connection = connection = new signalR.HubConnectionBuilder()
+                                                .withUrl("/transactionHub")
+                                                .configureLogging(signalR.LogLevel.Information)
+                                                .build();
 
-        connection.on("SendAction", function (sender, action) {
-            console.log("SendAction:xcx " + sender + ' ' + action);
-        });
+            connection.on("SendMessage", function (sender, message) {
+                console.log(sender + ': ' + message);
+            });
             
-          connection.start().then(function() {
+            connection.on("Send", function (message) {
+                console.log(message);
+            });
+
+            connection.on("SendAction", function (sender, action) {
+                console.log("SendAction: " + sender + ' ' + action);
+            });
+            
+            connection.on("PurchaseOrderRegistered", function (groupName, orderId, amount, currency) {
+                console.log("PurchaseOrderRegistered: " + groupName + ' ' + amount + ' ' + currency);
+            });
+            
+            connection.start().then(function() {
                 console.log("connection started!");
 
-                connection.send('Send', 'Hello from HubTest.vue');
+                connection.send('Subscribe', 'Store' + store);
+                connection.send('Send', 'Store' + store, 'Hello to store' + store);
             });
             
     });
-
-
     </script>
-
 }
