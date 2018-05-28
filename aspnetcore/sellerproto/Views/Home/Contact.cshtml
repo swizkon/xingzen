@@ -7,42 +7,56 @@
 
 <p>Use this area to provide additional information.</p>
 
-<img src="/transactions/qrcode?data=JOnas" />
+<form id="register">
+    <input type="number" name="amount" id="amount" />
+    <input type="hidden" name="currency" value="SEK" />
+    <input type="hidden" name="store" value="gagga" />
+    <input type="submit" />
+</form>
 
 @section scripts {
     <script>
 
     var store = '@ViewData["Store"]';
     var connection;
-
+    
     $(document).ready(function(){
         
-            connection = connection = new signalR.HubConnectionBuilder()
-                                                .withUrl("/transactionHub")
-                                                .configureLogging(signalR.LogLevel.Information)
-                                                .build();
+        connection = connection = new signalR.HubConnectionBuilder()
+                                             .withUrl("/transactionHub")
+                                             .configureLogging(signalR.LogLevel.Information)
+                                             .build();
 
-            connection.on("SendMessage", function (sender, message) {
-                console.log(sender + ': ' + message);
-            });
+        connection.on("SendMessage", function (sender, message) {
+            console.log(sender + ': ' + message);
+        });
             
-            connection.on("Send", function (message) {
-                console.log(message);
-            });
+        connection.on("Send", function (message) {
+             console.log(message);
+        });
 
-            connection.on("SendAction", function (sender, action) {
-                console.log("SendAction: " + sender + ' ' + action);
-            });
+        connection.on("SendAction", function (sender, action) {
+            console.log("SendAction: " + sender + ' ' + action);
+        });
             
-            connection.on("PurchaseOrderRegistered", function (groupName, orderId, amount, currency) {
-                console.log("PurchaseOrderRegistered: " + groupName + ' ' + amount + ' ' + currency);
-            });
+        connection.on("PurchaseOrderRegistered", function (groupName, orderId, amount, currency) {
+            console.log("PurchaseOrderRegistered: " + groupName + ' ' + amount + ' ' + currency);
+        });
             
-            connection.start().then(function() {
-                console.log("connection started!");
+        connection.start().then(function() {
+            // console.log("connection started!");
+            // connection.send('RegisterPurchaseOrder', 'Store' + store, 'OrderId', 123, 'SEK');
+        });
 
-                connection.send('RegisterPurchaseOrder', 'Store' + store, 'OrderId', 123, 'SEK');
-            });
+        $('#register').on('submit', function(e){
+            
+            // console.log(e);
+            var amount = e.target.querySelector("input[name='amount']"); //.value;
+            console.log(amount.value);
+            connection.send('RegisterPurchaseOrder', 'Store' + store, 'OrderId-' + Math.floor(Math.random() * 1000000), amount.value, 'SEK');
+            e.preventDefault();
+            return false;
+        })
             
     });
     </script>

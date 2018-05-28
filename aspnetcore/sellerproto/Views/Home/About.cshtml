@@ -1,13 +1,13 @@
 ﻿@{
-    ViewData["Title"] = "About";
+    ViewData["Title"] = "Customer face";
 }
-<h2>@ViewData["Title"]</h2>
-<h3>@ViewData["Message"]</h3>
-<h3>Store: @ViewData["Store"]</h3>
+<h3>@ViewData["Title"] <small>Store: @ViewData["Store"]</small></h3>
 
-<p>Use this area to provide additional information.</p>
-
-<img src="/transactions/qrcode?data=JOnas" />
+<h2>
+    Amount: <span class="amount">AMOUNT</span>
+</h2>
+<img id="qr" src="/transactions/qrcode?data=JOnas" />
+<div id="orders"></div>
 
 @section scripts {
     <script>
@@ -17,33 +17,42 @@
 
     $(document).ready(function(){
         
-            connection = connection = new signalR.HubConnectionBuilder()
+        connection = connection = new signalR.HubConnectionBuilder()
                                                 .withUrl("/transactionHub")
                                                 .configureLogging(signalR.LogLevel.Information)
                                                 .build();
 
-            connection.on("SendMessage", function (sender, message) {
-                console.log(sender + ': ' + message);
-            });
+        connection.on("SendMessage", function (sender, message) {
+            console.log(sender + ': ' + message);
+        });
             
-            connection.on("Send", function (message) {
-                console.log(message);
-            });
+        connection.on("Send", function (message) {
+            console.log(message);
+        });
 
-            connection.on("SendAction", function (sender, action) {
-                console.log("SendAction: " + sender + ' ' + action);
-            });
+        connection.on("SendAction", function (sender, action) {
+            console.log("SendAction: " + sender + ' ' + action);
+        });
             
-            connection.on("PurchaseOrderRegistered", function (groupName, orderId, amount, currency) {
-                console.log("PurchaseOrderRegistered: " + groupName + ' ' + orderId + ' ' + amount + ' ' + currency);
-            });
+        connection.on("PurchaseOrderRegistered", function (groupName, orderId, amount, currency) {
+            console.log("PurchaseOrderRegistered: " + groupName + ' ' + orderId + ' ' + amount + ' ' + currency);
             
-            connection.start().then(function() {
-                console.log("connection started!");
+            document.querySelector('h2 span.amount').innerText = amount + " " + currency;
 
-                connection.send('Subscribe', 'Store' + store);
-                connection.send('Send', 'Store' + store, 'Hello to store' + store);
-            });
+            var tx = "amount=" + amount + "&currency=" + currency + "&order=" + orderId;
+            var qr_src = "/transactions/qrcode?data=" + encodeURIComponent(tx);
+            document.querySelector('img#qr').src = qr_src;
+            // qr" src="/transactions/qrcode?data=JOnas
+
+            var order = document.createElement("DIV");
+            order.innerText = "Amount=" + amount + " " + currency;
+            document.querySelector('#orders').appendChild(order);
+        });
+            
+        connection.start().then(function() {
+            connection.send('Subscribe', 'Store' + store);
+            connection.send('Send', 'Store' + store, 'Hello to store' + store);
+        });
             
     });
     </script>
