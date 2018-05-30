@@ -16,7 +16,9 @@
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
 
-    <link rel="stylesheet" href="https://apvarun.github.io/toastify-js/src/toastify.css" />
+    <!-- link href="https://apvarun.github.io/toastify-js/src/toastify.css" / -->
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -52,7 +54,7 @@
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/lib/signalr.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
-        <script src="https://apvarun.github.io/toastify-js/src/toastify.js"></script>
+
         
     </environment>
     <environment exclude="Development">
@@ -70,6 +72,7 @@
         </script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
     @RenderSection("Scripts", required: false)
 </body>

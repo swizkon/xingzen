@@ -1,11 +1,10 @@
 ﻿@{
     ViewData["Title"] = "Numpad";
 }
-<h2>@ViewData["Title"]</h2>
-<h3>@ViewData["Message"]</h3>
-<h3>Store: @ViewData["Store"]</h3>
 
-<p>Use this area to provide additional information.</p>
+<h3>@ViewData["Title"] <small>Store: @ViewData["Store"]</small></h3>
+
+<p>Register new purchase order:</p>
 
 <form id="register">
     <input type="number" name="amount" id="amount" />
@@ -39,20 +38,41 @@
             console.log("SendAction: " + sender + ' ' + action);
         });
             
+        /*
         connection.on("PurchaseOrderRegistered", function (groupName, orderId, amount, currency) {
             console.log("PurchaseOrderRegistered: " + groupName + ' ' + amount + ' ' + currency);
         });
+        */
+        
+        connection.on("PurchaseOrderRegistered", function (groupName, orderId, amount, currency) {
+            
+            Toastify({
+                    text: "PurchaseOrderRegistered: " + amount + " " + currency,
+                    duration: 1000,
+                    gravity: "bottom",
+                    positionLeft: false,
+                    close: true,
+                    }).showToast();
+        });
+        
+        connection.on("PurchaseOrderAccepted", function (groupName, orderId, amount, currency) {
+            
+            Toastify({
+                    text: "Accepted: " + amount + " " + currency,
+                    duration: 3000,
+                    gravity: "bottom",
+                    positionLeft: false,
+                    close: true,
+                    }).showToast();
+        });
             
         connection.start().then(function() {
-            // console.log("connection started!");
-            // connection.send('RegisterPurchaseOrder', 'Store' + store, 'OrderId', 123, 'SEK');
+            connection.send('Subscribe', 'Store' + store);
         });
 
         $('#register').on('submit', function(e){
+            var amount = e.target.querySelector("input[name='amount']");
             
-            // console.log(e);
-            var amount = e.target.querySelector("input[name='amount']"); //.value;
-            console.log(amount.value);
             connection.send('RegisterPurchaseOrder', 'Store' + store, 'OrderId-' + Math.floor(Math.random() * 1000000), amount.value, 'SEK');
             e.preventDefault();
             return false;

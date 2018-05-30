@@ -3,11 +3,9 @@
 }
 <h3>@ViewData["Title"] <small>Store: @ViewData["Store"]</small></h3>
 
-<h2>
-    Amount: <span class="amount">AMOUNT</span>
-</h2>
-<img id="qr" src="/transactions/qrcode?data=JOnas" />
+
 <div id="orders"></div>
+
 
 @section scripts {
     <script>
@@ -37,17 +35,42 @@
         connection.on("PurchaseOrderRegistered", function (groupName, orderId, amount, currency) {
             console.log("PurchaseOrderRegistered: " + groupName + ' ' + orderId + ' ' + amount + ' ' + currency);
             
-            document.querySelector('h2 span.amount').innerText = amount + " " + currency;
+            // document.querySelector('h2 span.amount').innerText = amount + " " + currency;
 
             var tx = "amount=" + amount + "&currency=" + currency + "&order=" + orderId;
             var qr_src = "/transactions/qrcode?data=" + encodeURIComponent(tx);
-            document.querySelector('img#qr').src = qr_src;
+            // document.querySelector('img#qr').src = qr_src;
 
             var order = document.createElement("DIV");
-            order.innerText = "Amount=" + amount + " " + currency;
+            order.setAttribute("id", "order-info-" + orderId)
+            order.innerHTML = "<h2><small>Amount:</small> " + amount + " " + currency + "</h2>";
+            var img = document.createElement("IMG");
+            img.src = qr_src;
+            order.appendChild(img);
+
             document.querySelector('#orders').appendChild(order);
+
             Toastify({
                     text: "New: " + amount + " " + currency,
+                    duration: 3000,
+                    gravity: "bottom",
+                    positionLeft: false,
+                    close: true,
+                    }).showToast();
+
+            setTimeout(function(){
+                console.log("Accept " + orderId);
+                connection.send('AcceptPurchaseOrder', 'Store' + store, orderId, amount, currency);
+            }, 2000);
+        });
+        
+        connection.on("PurchaseOrderAccepted", function (groupName, orderId, amount, currency) {
+
+            $("#order-info-" + orderId).fadeOut();
+            // var n = document.querySelector("#order-info-" + orderId)
+            // n.parentNode.removeChild(n);
+            Toastify({
+                    text: "Accepted: " + orderId,
                     duration: 3000,
                     gravity: "bottom",
                     positionLeft: false,
