@@ -50,6 +50,7 @@
 
             document.querySelector('#orders').appendChild(order);
 
+            /*
             Toastify({
                     text: "New: " + amount + " " + currency,
                     duration: 3000,
@@ -57,7 +58,7 @@
                     positionLeft: false,
                     close: true,
                     }).showToast();
-
+            */
             setTimeout(function(){
                 console.log("Accept " + orderId);
                 connection.send('AcceptPurchaseOrder', 'Store' + store, orderId, amount, currency);
