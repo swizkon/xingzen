@@ -20,6 +20,12 @@ namespace Hubs
         {
             return Clients.All.SendAsync("Send", message);
         }
+        
+        public Task Notify(string message)
+        {
+            System.Diagnostics.Trace.WriteLine("Task Notify(string message)");
+            return Clients.All.SendAsync("Notify", message);
+        }
 
         public Task RegisterPurchaseOrder(string groupName, string orderId, decimal amount, string currency)
         {

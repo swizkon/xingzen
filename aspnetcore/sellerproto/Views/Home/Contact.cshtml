@@ -7,7 +7,7 @@
 <p>Register new purchase order:</p>
 
 <form id="register">
-    <input type="number" name="amount" id="amount" />
+    <input type="tel" name="amount" id="amount" />
     <input type="hidden" name="currency" value="SEK" />
     <input type="hidden" name="store" value="gagga" />
     <input type="submit" />
@@ -36,6 +36,26 @@
 
         connection.on("SendAction", function (sender, action) {
             console.log("SendAction: " + sender + ' ' + action);
+        });
+            
+        connection.on("Notify", function (data) {
+            Toastify({
+                    text: "Notify: " + data,
+                    duration: 1000,
+                    gravity: "bottom",
+                    positionLeft: false,
+                    close: true,
+                    }).showToast();
+        });
+        
+        connection.on("StoreBalance", function (balance, currency) {
+            Toastify({
+                    text: "StoreBalance: " + balance + " " + currency,
+                    duration: 1000,
+                    gravity: "bottom",
+                    positionLeft: false,
+                    close: true,
+                    }).showToast();
         });
             
         /*
@@ -73,7 +93,7 @@
         $('#register').on('submit', function(e){
             var amount = e.target.querySelector("input[name='amount']");
             
-            connection.send('RegisterPurchaseOrder', 'Store' + store, 'OrderId-' + Math.floor(Math.random() * 1000000), amount.value, 'SEK');
+            connection.send('RegisterPurchaseOrder', 'Store' + store, 'Order-' + Math.floor(Math.random() * 1000), amount.value, 'SEK');
             e.preventDefault();
             return false;
         })
