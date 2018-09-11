@@ -12,6 +12,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using sellerproto.Infrastructure;
 
+using Swashbuckle.AspNetCore.Swagger;
+
 namespace sellerproto
 {
     public class Startup
@@ -53,6 +55,12 @@ namespace sellerproto
             }
             Configuration = builder.Build();
             */
+            
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Fake API V1");
+            });
 
             app.UseStaticFiles()
                 .UseSession()
@@ -85,6 +93,11 @@ namespace sellerproto
 
             services.AddMvc();
             services.AddSignalR();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "Fake API", Version = "v1" });
+            });
 
             services.AddDistributedMemoryCache();
             services.AddSession(options =>

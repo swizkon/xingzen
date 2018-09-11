@@ -14,6 +14,11 @@ namespace sellerproto.Controllers
         [Authorize]
         public IActionResult Index()
         {
+            var claims = User.Claims?.Select(c => c.Type + ": " +  c.Value).ToArray();
+            var userClaims = User.Identity.Name + ": " + string.Join(" | " , claims);
+
+            ViewData["Message"] = "Your application description page.";
+            ViewData["UserClaims"] = userClaims;
             return View();
         }
 
