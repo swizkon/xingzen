@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+/*
 namespace sellerproto.Infrastructure
 {
     public class AzureAdB2COptions
@@ -30,3 +30,6 @@ namespace sellerproto.Infrastructure
         public string ApiScopes { get; set; }
     }
 }
+
+
+*/

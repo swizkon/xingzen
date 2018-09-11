@@ -10,7 +10,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using sellerproto.Infrastructure;
+
+using Swizkon.Infrastructure.Authentication;
 
 using Swashbuckle.AspNetCore.Swagger;
 

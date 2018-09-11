@@ -9,8 +9,9 @@ using System.Security.Claims;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Http.Features.Authentication;
 using Microsoft.AspNetCore.Authentication;
-using sellerproto.Infrastructure;
- 
+
+using Swizkon.Infrastructure.Authentication;
+
 namespace sellerproto.Controllers
 {
     public class SessionController : Controller
