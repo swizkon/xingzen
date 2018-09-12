@@ -40,24 +40,32 @@ namespace sellerproto
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            
+
 
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables();
-                
+                .AddEnvironmentVariables()
+                .AddCommandLine(new string[]{
+                       "--Azure:StorageConnectionString", "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;QueueEndpoint=http://127.0.0.1:10001/devstoreaccount1;TableEndpoint=http://127.0.0.1:10002/devstoreaccount1;"
+                   });
+
             if (env.IsDevelopment())
             {
                 builder.AddCommandLine(new string[]{
-                       "--StorageConnectionString", "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;"
+                       "--Azure:StorageConnectionString", "DefaultEndpointsProtocol=http;"
+                       + "AccountName=devstoreaccount1;"
+                       + "AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;" 
+                       + "BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;"
+                       + "QueueEndpoint=http://127.0.0.1:10001/devstoreaccount1;"
+                       + "TableEndpoint=http://127.0.0.1:10002/devstoreaccount1;"
                    });
-                builder.AddUserSecrets<Startup>();
+                // builder.AddUserSecrets<Startup>();
             }
-            
+
             Configuration = builder.Build();
-            
+
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
@@ -106,7 +114,7 @@ namespace sellerproto
                 options.Cookie.HttpOnly = true;
             });
 
-            services.AddScoped<IStoreRepository, StoreRepository>();
+            services.AddSingleton<IStoreRepository, StoreRepository>();
             services.AddScoped<IStoreService, StoreService>();
 
             services.AddLogging();

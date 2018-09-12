@@ -23,6 +23,7 @@ namespace sellerproto.Controllers
         }
 
         [Authorize]
+        [HttpGet]
         public IActionResult Index()
         {
             var claims = User.Claims?.Select(c => c.Type + ": " + c.Value).ToArray();
@@ -34,6 +35,7 @@ namespace sellerproto.Controllers
         }
 
         [Authorize]
+        [HttpGet]
         public IActionResult Display()
         {
             ViewData["Message"] = "Your application description page.";
@@ -42,6 +44,7 @@ namespace sellerproto.Controllers
         }
 
         [Authorize]
+        [HttpGet]
         public IActionResult Numpad()
         {
             ViewData["Message"] = "Your contact page.";
@@ -49,20 +52,17 @@ namespace sellerproto.Controllers
             return View();
         }
 
+        [Authorize]
         [HttpPost]
         public IActionResult CreateStore(CreateStoreModel storeModel)
         {
-            var valid = ModelState.IsValid;
-            
-            var storeId = Guid.NewGuid().ToString();
-
             if(ModelState.IsValid)
             {
                 var store = _storeService.CreateStore(storeModel.Name, User);
-                return RedirectToAction(nameof(CashRegisterController.Index), "CashRegister", "StoreCreated=" + store.Id + "&valid=" + valid);
+                return RedirectToAction(nameof(CashRegisterController.Index), "CashRegister", "StoreCreated=" + store.Id);
             }
             
-            return RedirectToAction(nameof(CashRegisterController.Index), "CashRegister", "Error=SomeError");
+            return RedirectToAction(nameof(CashRegisterController.Index), "CashRegister");
         }
 
         public IActionResult Error()
