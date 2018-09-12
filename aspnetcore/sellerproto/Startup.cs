@@ -16,6 +16,7 @@ using Swizkon.Infrastructure.Authentication;
 using Swashbuckle.AspNetCore.Swagger;
 using XingZen.Domain.Repositories;
 using XingZen.Domain.Repositories.Interfaces;
+using XingZen.Domain.Services;
 
 namespace sellerproto
 {
@@ -106,6 +107,7 @@ namespace sellerproto
             });
 
             services.AddScoped<IStoreRepository, StoreRepository>();
+            services.AddScoped<IStoreService, StoreService>();
 
             services.AddLogging();
         }

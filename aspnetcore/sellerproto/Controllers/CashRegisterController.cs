@@ -5,17 +5,22 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using sellerproto.Models;
-using XingZen.Domain.Repositories.Interfaces;
+using XingZen.Domain.Services;
 
 namespace sellerproto.Controllers
 {
     public class CashRegisterController : Controller
     {
-        private readonly IStoreRepository _storeRepository;
+        private readonly IStoreService _storeService;
+        private readonly ILogger _logger;
 
-        public CashRegisterController(IStoreRepository storeRepository) 
-        => _storeRepository = storeRepository;
+        public CashRegisterController(IStoreService storeService, ILogger<CashRegisterController> logger)
+        {
+            _storeService = storeService;
+            _logger = logger;
+        }
 
         [Authorize]
         public IActionResult Index()
@@ -53,12 +58,11 @@ namespace sellerproto.Controllers
 
             if(ModelState.IsValid)
             {
-                var store = new XingZen.Domain.Model.Store(id: storeId, name: storeModel.Name);
-
-                _storeRepository.Add(store);
+                var store = _storeService.CreateStore(storeModel.Name, User);
+                return RedirectToAction(nameof(CashRegisterController.Index), "CashRegister", "StoreCreated=" + store.Id + "&valid=" + valid);
             }
-
-            return RedirectToAction(nameof(CashRegisterController.Index), "CashRegister", "StoreCreated=" + storeId + "&valid=" + valid);
+            
+            return RedirectToAction(nameof(CashRegisterController.Index), "CashRegister", "Error=SomeError");
         }
 
         public IActionResult Error()
