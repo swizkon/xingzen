@@ -11,3 +11,12 @@ UserClaims: @ViewData["UserClaims"]
 <div>    
 Message: @ViewData["Message"]
 </div>
+
+
+<div>
+    <h2>Create new store</h2>
+    <form action="/CashRegister/CreateStore" method="POST">
+    <input type="text" name="name"/>
+    <input type="submit" />
+    </form>
+</div>

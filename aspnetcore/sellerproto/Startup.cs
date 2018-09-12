@@ -26,7 +26,6 @@ namespace sellerproto
 
         public IConfiguration Configuration { get; set; }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
@@ -38,24 +37,23 @@ namespace sellerproto
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            
+
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
-            Configuration = builder.Build();
-
-            /*
+                
             if (env.IsDevelopment())
             {
-                builder.SetBasePath(env.ContentRootPath)
-                        .AddJsonFile("appsettings.json", optional: true)
-                        .AddJsonFile("appsettings.local.json", optional: true)
-                        .AddJsonFile("appsettings.Development.json", optional: true)
-                        .AddEnvironmentVariables();
+                builder.AddCommandLine(new string[]{
+                       "--StorageConnectionString", "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;"
+                   });
+                builder.AddUserSecrets<Startup>();
             }
+            
             Configuration = builder.Build();
-            */
             
             app.UseSwagger();
             app.UseSwaggerUI(c =>
@@ -78,8 +76,6 @@ namespace sellerproto
                 });
         }
 
-
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             Console.WriteLine("ConfigureServices(IServiceCollection services)");
