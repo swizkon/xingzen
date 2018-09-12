@@ -14,6 +14,7 @@ namespace sellerproto.Controllers
     public class CashRegisterController : Controller
     {
         private readonly IStoreService _storeService;
+        
         private readonly ILogger _logger;
 
         public CashRegisterController(IStoreService storeService, ILogger<CashRegisterController> logger)
@@ -39,19 +40,22 @@ namespace sellerproto.Controllers
 
         [Authorize]
         [HttpGet]
-        public IActionResult Display()
+        public IActionResult Display(string id)
         {
             ViewData["Message"] = "Your application description page.";
-            ViewData["Store"] = base.HttpContext.Request.Query.FirstOrDefault(x => x.Key == "store").Value;
-            return View();
+            var store = _storeService.StoresByUser(owner: User).First(x => x.Id == id);
+
+            return View(model: store);
         }
 
         [Authorize]
         [HttpGet]
-        public IActionResult Numpad()
+        public IActionResult Numpad(string id)
         {
             ViewData["Message"] = "Your contact page.";
-            ViewData["Store"] = base.HttpContext.Request.Query.FirstOrDefault(x => x.Key == "store").Value;
+            ViewData["Store"] = id; // base.HttpContext.Request.Query.FirstOrDefault(x => x.Key == "store").Value;
+            
+            var store = _storeService.StoresByUser(owner: User).First(x => x.Id == id);
             return View();
         }
 

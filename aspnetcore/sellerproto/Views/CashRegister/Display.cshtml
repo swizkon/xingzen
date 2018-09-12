@@ -1,8 +1,9 @@
-﻿@{
+﻿@model XingZen.Domain.Model.Store
+
+@{
     ViewData["Title"] = "Customer face";
 }
-<h3>@ViewData["Title"] <small>Store: @ViewData["Store"]</small></h3>
-
+<h3>@Model.Name <small>customer display</small></h3>
 
 <div id="orders"></div>
 
