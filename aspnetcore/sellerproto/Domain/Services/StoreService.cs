@@ -1,6 +1,8 @@
 namespace XingZen.Domain.Services
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Security.Claims;
     using Microsoft.Extensions.Configuration;
     using Microsoft.WindowsAzure.Storage;
@@ -10,7 +12,6 @@ namespace XingZen.Domain.Services
 
     public class StoreService : IStoreService
     {
-        private const string STORES = "stores";
         private readonly IStoreRepository _storeRepository;
 
         public StoreService(IStoreRepository configuration)
@@ -26,6 +27,11 @@ namespace XingZen.Domain.Services
             _storeRepository.Add(store);
 
             return store;
+        }
+
+        public IList<Store> StoresByUser(ClaimsPrincipal owner)
+        {
+            return _storeRepository.GetAll().Result.ToList();
         }
     }
 }

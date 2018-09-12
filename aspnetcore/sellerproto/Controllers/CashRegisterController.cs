@@ -31,7 +31,10 @@ namespace sellerproto.Controllers
 
             ViewData["Message"] = "Your application description page.";
             ViewData["UserClaims"] = userClaims;
-            return View();
+
+            var stores = _storeService.StoresByUser(owner: User);
+            _logger.LogDebug($"Got stores {stores.Count}");
+            return View(model: stores);
         }
 
         [Authorize]
