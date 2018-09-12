@@ -1,8 +1,9 @@
 ﻿@model XingZen.Domain.Model.Store
 
 @{
-    ViewData["Title"] = "Customer face";
+    ViewData["Title"] = Model.Name + " customer display";
 }
+
 <h3>@Model.Name <small>customer display</small></h3>
 
 <div id="orders"></div>
@@ -11,7 +12,7 @@
 @section scripts {
     <script>
 
-    var store = '@ViewData["Store"]';
+    var store = '@Model.Id';
     var connection;
 
     $(document).ready(function(){
@@ -36,8 +37,6 @@
         connection.on("PurchaseOrderRegistered", function (groupName, orderId, amount, currency) {
             console.log("PurchaseOrderRegistered: " + groupName + ' ' + orderId + ' ' + amount + ' ' + currency);
             
-            // document.querySelector('h2 span.amount').innerText = amount + " " + currency;
-
             var tx = "amount=" + amount + "&currency=" + currency + "&order=" + orderId;
             var qr_src = "/transactions/qrcode?data=" + encodeURIComponent(tx);
             // document.querySelector('img#qr').src = qr_src;
@@ -61,7 +60,6 @@
                     }).showToast();
             */
             setTimeout(function(){
-                console.log("Accept " + orderId);
                 connection.send('AcceptPurchaseOrder', 'Store' + store, orderId, amount, currency);
             }, 2000);
         });
@@ -80,7 +78,6 @@
             
         connection.start().then(function() {
             connection.send('Subscribe', 'Store' + store);
-            connection.send('Send', 'Store' + store, 'Hello to store' + store);
         });
             
     });

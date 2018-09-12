@@ -1,22 +1,24 @@
-﻿@{
-    ViewData["Title"] = "Numpad";
+﻿@model XingZen.Domain.Model.Store
+
+@{
+    ViewData["Title"] = Model.Name + " register";
 }
 
-<h3>@ViewData["Title"] <small>Store: @ViewData["Store"]</small></h3>
+<h3>@Model.Name <small>register</small></h3>
 
-<p>Register new purchase order:</p>
+<p>New purchase:</p>
 
-<form id="register">
-    <input type="tel" name="amount" id="amount" />
+<form id="register" onsubmit="this.reset">
+    <input type="tel" name="amount" id="amount" class="input input-lg" />
     <input type="hidden" name="currency" value="SEK" />
-    <input type="hidden" name="store" value="gagga" />
-    <input type="submit" />
+    <input type="hidden" name="store" value="@Model.Id" />
+    <input type="submit"  class="input input-lg"/>
 </form>
 
 @section scripts {
     <script>
 
-    var store = '@ViewData["Store"]';
+    var store = '@Model.Id'; // @Model.Id
     var connection;
     
     $(document).ready(function(){
@@ -58,12 +60,6 @@
                     }).showToast();
         });
             
-        /*
-        connection.on("PurchaseOrderRegistered", function (groupName, orderId, amount, currency) {
-            console.log("PurchaseOrderRegistered: " + groupName + ' ' + amount + ' ' + currency);
-        });
-        */
-        
         connection.on("PurchaseOrderRegistered", function (groupName, orderId, amount, currency) {
             
             Toastify({
@@ -95,6 +91,7 @@
             
             connection.send('RegisterPurchaseOrder', 'Store' + store, 'Order-' + Math.floor(Math.random() * 1000), amount.value, 'SEK');
             e.preventDefault();
+            e.target.reset();
             return false;
         })
             

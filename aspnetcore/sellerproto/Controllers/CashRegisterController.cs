@@ -30,7 +30,6 @@ namespace sellerproto.Controllers
             var claims = User.Claims?.Select(c => c.Type + ": " + c.Value).ToArray();
             var userClaims = User.Identity.Name + ": " + string.Join(" | ", claims);
 
-            ViewData["Message"] = "Your application description page.";
             ViewData["UserClaims"] = userClaims;
 
             var stores = _storeService.StoresByUser(owner: User);
@@ -42,8 +41,11 @@ namespace sellerproto.Controllers
         [HttpGet]
         public IActionResult Display(string id)
         {
-            ViewData["Message"] = "Your application description page.";
-            var store = _storeService.StoresByUser(owner: User).First(x => x.Id == id);
+            var store = _storeService.StoresByUser(owner: User).FirstOrDefault(x => x.Id == id);
+            if(store == null)
+            {
+                return RedirectToAction(nameof(CashRegisterController.Index), "CashRegister");
+            }
 
             return View(model: store);
         }
@@ -52,11 +54,14 @@ namespace sellerproto.Controllers
         [HttpGet]
         public IActionResult Numpad(string id)
         {
-            ViewData["Message"] = "Your contact page.";
-            ViewData["Store"] = id; // base.HttpContext.Request.Query.FirstOrDefault(x => x.Key == "store").Value;
+            var store = _storeService.StoresByUser(owner: User).FirstOrDefault(x => x.Id == id);
             
-            var store = _storeService.StoresByUser(owner: User).First(x => x.Id == id);
-            return View();
+            if(store == null)
+            {
+                return RedirectToAction(nameof(CashRegisterController.Index), "CashRegister");
+            }
+
+            return View(model: store);
         }
 
         [Authorize]

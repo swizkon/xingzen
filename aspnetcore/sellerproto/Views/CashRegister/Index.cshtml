@@ -1,18 +1,9 @@
 ﻿@model IList<XingZen.Domain.Model.Store>
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Stores";
 }
 
-<h1>The page</h1>
-
-<div>    
-UserClaims: @ViewData["UserClaims"]
-</div>
-
-<div>    
-Message: @ViewData["Message"]
-</div>
-
+<h1>@ViewData["Title"]</h1>
 
 @foreach (var store in Model) {
     <div>
@@ -32,4 +23,9 @@ Message: @ViewData["Message"]
     <input type="text" name="name"/>
     <input type="submit" />
     </form>
+</div>
+
+
+<div>    
+UserClaims: @ViewData["UserClaims"]
 </div>
