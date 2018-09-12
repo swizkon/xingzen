@@ -6,15 +6,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using sellerproto.Models;
+using XingZen.Domain.Repositories.Interfaces;
 
 namespace sellerproto.Controllers
 {
     public class CashRegisterController : Controller
     {
-        public CashRegisterController()
-        {
+        private readonly IStoreRepository _storeRepository;
 
-        }
+        public CashRegisterController(IStoreRepository storeRepository) 
+        => _storeRepository = storeRepository;
 
         [Authorize]
         public IActionResult Index()
@@ -47,8 +48,15 @@ namespace sellerproto.Controllers
         public IActionResult CreateStore(CreateStoreModel storeModel)
         {
             var valid = ModelState.IsValid;
+            
             var storeId = Guid.NewGuid().ToString();
-            XingZen.Domain.Model.Store store = new XingZen.Domain.Model.Store(id: storeId, name: storeModel.Name);
+
+            if(ModelState.IsValid)
+            {
+                var store = new XingZen.Domain.Model.Store(id: storeId, name: storeModel.Name);
+
+                _storeRepository.Add(store);
+            }
 
             return RedirectToAction(nameof(CashRegisterController.Index), "CashRegister", "StoreCreated=" + storeId + "&valid=" + valid);
         }

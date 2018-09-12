@@ -14,6 +14,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Swizkon.Infrastructure.Authentication;
 
 using Swashbuckle.AspNetCore.Swagger;
+using XingZen.Domain.Repositories;
+using XingZen.Domain.Repositories.Interfaces;
 
 namespace sellerproto
 {
@@ -102,6 +104,8 @@ namespace sellerproto
                 options.IdleTimeout = TimeSpan.FromHours(1);
                 options.Cookie.HttpOnly = true;
             });
+
+            services.AddScoped<IStoreRepository, StoreRepository>();
 
             services.AddLogging();
         }
