@@ -22,7 +22,7 @@ namespace XingZen.Domain.Services
         public Store CreateStore(string name, ClaimsPrincipal owner)
         {
             var storeId = Guid.NewGuid().ToString();
-            var store = new XingZen.Domain.Model.Store(id: storeId, name: name);
+            var store = new Store(id: storeId, name: name);
 
             _storeRepository.Add(store);
 

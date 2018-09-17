@@ -40,8 +40,6 @@ namespace sellerproto
                 app.UseExceptionHandler("/Home/Error");
             }
 
-
-
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
@@ -61,7 +59,6 @@ namespace sellerproto
                        + "QueueEndpoint=http://127.0.0.1:10001/devstoreaccount1;"
                        + "TableEndpoint=http://127.0.0.1:10002/devstoreaccount1;"
                    });
-                // builder.AddUserSecrets<Startup>();
             }
 
             Configuration = builder.Build();

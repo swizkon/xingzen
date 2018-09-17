@@ -16,11 +16,10 @@ namespace XingZen.Domain.Repositories
         private readonly CloudTable _table;
         private readonly ILogger _logger;
 
-        public RepositoryBase(IConfiguration configuration, string tableName, ILogger logger)
+        protected RepositoryBase(IConfiguration configuration, string tableName, ILogger logger)
         {
             _logger = logger;
             var connectionString = configuration["Azure:StorageConnectionString"];
-            _logger.LogInformation($"Connect using {connectionString}");
 
             var cloudStorageAccount = CloudStorageAccount.Parse(connectionString);
             _tableClient = cloudStorageAccount.CreateCloudTableClient();
@@ -40,7 +39,13 @@ namespace XingZen.Domain.Repositories
             return (TMapping) result.Result;
         }
 
-        public async Task<IEnumerable<TDomain>> GetAllDomainEntities()
+
+        public async Task<IEnumerable<TDomain>> GetAll()
+        {
+            return await GetAllDomainEntities();
+        }
+
+        private async Task<IEnumerable<TDomain>> GetAllDomainEntities()
         {
             // var q = TableQuery.GenerateFilterCondition("", QueryComparisons.Equal, "");
             var query = new TableQuery<TMapping>();

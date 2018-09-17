@@ -41,10 +41,10 @@ namespace XingZen.Domain.Repositories
             return result;
         }
 
-        public async Task<IEnumerable<Store>> GetAll()
-        {
-            var result = await base.GetAllDomainEntities();
-            return result;
-        }
+        // public async Task<IEnumerable<Store>> GetAll()
+        // {
+        //     var result = await base.GetAllDomainEntities();
+        //     return result;
+        // }
     }
 }
