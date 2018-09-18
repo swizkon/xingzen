@@ -8,7 +8,7 @@ using Microsoft.WindowsAzure.Storage.Table;
 
 namespace XingZen.Domain.Repositories
 {
-    public abstract class RepositoryBase<TDomain, TMapping> 
+    public abstract class RepositoryBase<TDomain, TMapping>
         where TDomain : class
         where TMapping : ITableEntity, new()
     {
@@ -30,27 +30,44 @@ namespace XingZen.Domain.Repositories
 
         protected abstract TDomain ToDomainEntity(TMapping tableEntity);
 
-        protected async Task<TMapping> Put(TDomain domainEntity)
+        public async Task Add(object partition, TDomain domainEntity)
         {
             var tableEntity = ToTableEntity(domainEntity);
-            
+            tableEntity.PartitionKey = partition.ToString();
             var result = await _table.ExecuteAsync(TableOperation.Insert(tableEntity));
-            return (TMapping) result.Result;
         }
 
-        public async Task<IEnumerable<TDomain>> GetAll()
+        public Task<IEnumerable<TDomain>> All(object partition)
         {
-            return await GetAllDomainEntities();
+            return GetAllDomainEntities(partition);
         }
 
-        private async Task<IEnumerable<TDomain>> GetAllDomainEntities()
+        public async Task<TDomain> Find(object partition, object row)
+        {
+            var query = new TableQuery<TMapping>();
+
+            var data = await _table.ExecuteQuerySegmentedAsync<TMapping>(query, null);
+            return data.Results.Where(x => x.PartitionKey == partition.ToString() && x.RowKey == row.ToString())
+                                .Select(ToDomainEntity)
+                                .FirstOrDefault();
+        }
+
+        private async Task<TMapping> Put(object partition, TDomain domainEntity)
+        {
+            var tableEntity = ToTableEntity(domainEntity);
+            tableEntity.PartitionKey = partition.ToString();
+            var result = await _table.ExecuteAsync(TableOperation.Insert(tableEntity));
+            return (TMapping)result.Result;
+        }
+
+        private async Task<IEnumerable<TDomain>> GetAllDomainEntities(object partition)
         {
             // var q = TableQuery.GenerateFilterCondition("", QueryComparisons.Equal, "");
             var query = new TableQuery<TMapping>();
             // .Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, "boards"));
 
             var data = await _table.ExecuteQuerySegmentedAsync<TMapping>(query, null);
-            return data.Results.Select(ToDomainEntity);
+            return data.Results.Where(x => x.PartitionKey == partition.ToString()).Select(ToDomainEntity);
         }
 
     }

@@ -5,8 +5,10 @@ namespace XingZen.Domain.Repositories.Interfaces
 {
     public interface IRepository<T> where T: class
     {
-        Task Add(T t);
+        Task Add(object partition, T t);
 
-        Task<IEnumerable<T>> GetAll();
+        Task<T> Find(object partition, object row);
+
+        Task<IEnumerable<T>> All(object partition);
     }
 }

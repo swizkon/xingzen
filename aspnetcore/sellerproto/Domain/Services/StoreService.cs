@@ -12,11 +12,11 @@ namespace XingZen.Domain.Services
 
     public class StoreService : IStoreService
     {
-        private readonly IStoreRepository _storeRepository;
+        private readonly IRepository<Store> _storeRepository;
 
-        public StoreService(IStoreRepository configuration)
+        public StoreService(IRepository<Store> storeRepository)
         {
-            _storeRepository = configuration;
+            _storeRepository = storeRepository;
         }
 
         public Store CreateStore(string name, ClaimsPrincipal owner)
@@ -24,14 +24,16 @@ namespace XingZen.Domain.Services
             var storeId = Guid.NewGuid().ToString();
             var store = new Store(id: storeId, name: name);
 
-            _storeRepository.Add(store);
+            var partitionKey = Infra.PartitionKeyGenerator.FromClaimsPrincipal(owner);
+            _storeRepository.Add(partitionKey, store);
 
             return store;
         }
 
         public IList<Store> StoresByUser(ClaimsPrincipal owner)
         {
-            return _storeRepository.GetAll().Result.ToList();
+            var partitionKey = Infra.PartitionKeyGenerator.FromClaimsPrincipal(owner);
+            return _storeRepository.All(partitionKey).Result.ToList();
         }
     }
 }

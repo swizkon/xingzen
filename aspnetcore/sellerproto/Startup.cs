@@ -17,6 +17,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using XingZen.Domain.Repositories;
 using XingZen.Domain.Repositories.Interfaces;
 using XingZen.Domain.Services;
+using XingZen.Domain.Model;
 
 namespace sellerproto
 {
@@ -111,7 +112,7 @@ namespace sellerproto
                 options.Cookie.HttpOnly = true;
             });
 
-            services.AddSingleton<IStoreRepository, StoreRepository>();
+            services.AddSingleton<IRepository<Store>, StoreRepository>();
             services.AddScoped<IStoreService, StoreService>();
 
             services.AddLogging();
