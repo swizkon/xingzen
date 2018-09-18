@@ -1,15 +1,16 @@
 
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Table;
+using XingZen.Domain.Mapping;
+using XingZen.Domain.Model;
+using XingZen.Domain.Repositories.Interfaces;
+
 namespace XingZen.Domain.Repositories
 {
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.Logging;
-    using Microsoft.WindowsAzure.Storage;
-    using Microsoft.WindowsAzure.Storage.Table;
-    using XingZen.Domain.Mapping;
-    using XingZen.Domain.Model;
-    using XingZen.Domain.Repositories.Interfaces;
 
     public class StoreRepository : RepositoryBase<Store, StoreMap>, IStoreRepository
     {

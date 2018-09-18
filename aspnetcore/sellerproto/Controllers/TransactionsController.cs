@@ -51,12 +51,5 @@ namespace sellerproto.Controllers
             var qrCodeImage = qrCode.GetGraphic(10);
             return new ContentResult() { Content = qrCodeImage, ContentType ="image/svg+xml" };
         }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
     }
 }
