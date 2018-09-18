@@ -33,6 +33,17 @@ namespace sellerproto.Controllers
             return new OkObjectResult(message);
         }
 
+
+        [HttpPost]
+        public IActionResult PlacePurchaseOrder([FromBody] PurchaseOrderModel purchaseOrder)
+        {
+            _transactionHub.Clients
+                            .Group("Store" + purchaseOrder.StoreId)
+                            .SendCoreAsync("PurchaseOrderRegistered", new object[] { purchaseOrder.StoreId, purchaseOrder.Amount, purchaseOrder.Currency });
+
+            return new OkObjectResult(purchaseOrder);
+        }
+
         [HttpPost]
         public IActionResult NotifyStoreBalance([FromBody] NotifyStoreBalanceModel notifyStoreBalance)
         {
