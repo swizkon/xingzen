@@ -34,12 +34,13 @@ namespace sellerproto.Controllers
         }
 
         [HttpPost]
-        public IActionResult NotifyStoreBalance(string storeId, string balance, string currency)
+        public IActionResult NotifyStoreBalance([FromBody] NotifyStoreBalanceModel notifyStoreBalance)
         {
-            _transactionHub.Clients.Group("Store" + storeId).SendCoreAsync("StoreBalanceAdjusted", new [] { storeId, balance, currency });
+            _transactionHub.Clients
+                            .Group("Store" + notifyStoreBalance.StoreId)
+                            .SendCoreAsync("StoreBalanceAdjusted", new object[] { notifyStoreBalance.StoreId, notifyStoreBalance.Balance, notifyStoreBalance.Currency });
 
-            var response = ModelState.Select(x => new {x.Key, x.Value.RawValue});
-            return new OkObjectResult(response);
+            return new OkObjectResult(notifyStoreBalance);
         }
 
         public IActionResult QRCode(string data)
