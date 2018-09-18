@@ -27,6 +27,12 @@ namespace Hubs
             return Clients.All.SendAsync("Notify", message);
         }
 
+        public Task NotifyStoreBalance(string groupName, string amount, string currency)
+        {
+            // System.Diagnostics.Trace.WriteLine("Task NotifyStoreBalance(string groupName, decimal amount, string currency)");
+            return Clients.Group(groupName).SendAsync("StoreBalanceAdjusted", groupName, amount, currency);
+        }
+
         public Task RegisterPurchaseOrder(string groupName, string orderId, decimal amount, string currency)
         {
             return Clients.Group(groupName).SendAsync("PurchaseOrderRegistered", groupName, orderId, amount, currency);

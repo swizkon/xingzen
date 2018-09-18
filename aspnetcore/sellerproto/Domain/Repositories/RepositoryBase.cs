@@ -20,7 +20,6 @@ namespace XingZen.Domain.Repositories
         {
             _logger = logger;
             var connectionString = configuration["Azure:StorageConnectionString"];
-
             var cloudStorageAccount = CloudStorageAccount.Parse(connectionString);
             _tableClient = cloudStorageAccount.CreateCloudTableClient();
             _table = _tableClient.GetTableReference(tableName.ToLower());
@@ -38,7 +37,6 @@ namespace XingZen.Domain.Repositories
             var result = await _table.ExecuteAsync(TableOperation.Insert(tableEntity));
             return (TMapping) result.Result;
         }
-
 
         public async Task<IEnumerable<TDomain>> GetAll()
         {

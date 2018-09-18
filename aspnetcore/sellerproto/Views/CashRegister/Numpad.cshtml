@@ -18,7 +18,7 @@
 @section scripts {
     <script>
 
-    var store = '@Model.Id'; // @Model.Id
+    var store = '@Model.Id';
     var connection;
     
     $(document).ready(function(){
@@ -50,9 +50,9 @@
                     }).showToast();
         });
         
-        connection.on("StoreBalance", function (balance, currency) {
+        connection.on("StoreBalanceAdjusted", function (groupName, balance, currency) {
             Toastify({
-                    text: "StoreBalance: " + balance + " " + currency,
+                    text: "StoreBalanceAdjusted: " + balance + " " + currency,
                     duration: 1000,
                     gravity: "bottom",
                     positionLeft: false,

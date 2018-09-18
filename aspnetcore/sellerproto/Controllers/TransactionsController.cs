@@ -29,15 +29,17 @@ namespace sellerproto.Controllers
         public IActionResult Notify(string message)
         {
             _transactionHub.Clients.All.SendCoreAsync("Notify", new [] { message });
+
             return new OkObjectResult(message);
         }
 
         [HttpPost]
         public IActionResult NotifyStoreBalance(string storeId, string balance, string currency)
         {
-            _transactionHub.Clients.Group(storeId).SendAsync("StoreBalance", balance, currency);
-            _transactionHub.Clients.Group("Store" + storeId).SendAsync("StoreBalance", balance, currency);
-            return new OkObjectResult(balance);
+            _transactionHub.Clients.Group("Store" + storeId).SendCoreAsync("StoreBalanceAdjusted", new [] { storeId, balance, currency });
+
+            var response = ModelState.Select(x => new {x.Key, x.Value.RawValue});
+            return new OkObjectResult(response);
         }
 
         public IActionResult QRCode(string data)
