@@ -11,19 +11,19 @@ using XingZen.Domain.Services;
 
 namespace sellerproto.Controllers
 {
-    public class CashRegisterController : Controller
+    [Authorize]
+    public class StoresController : Controller
     {
         private readonly IStoreService _storeService;
         
         private readonly ILogger _logger;
 
-        public CashRegisterController(IStoreService storeService, ILogger<CashRegisterController> logger)
+        public StoresController(IStoreService storeService, ILogger<StoresController> logger)
         {
             _storeService = storeService;
             _logger = logger;
         }
 
-        [Authorize]
         [HttpGet]
         public IActionResult Index()
         {
@@ -37,44 +37,41 @@ namespace sellerproto.Controllers
             return View(model: stores);
         }
 
-        [Authorize]
         [HttpGet]
         public IActionResult Display(string id)
         {
             var store = _storeService.StoresByUser(owner: User).FirstOrDefault(x => x.Id == id);
             if(store == null)
             {
-                return RedirectToAction(nameof(CashRegisterController.Index), "CashRegister");
+                return RedirectToAction(nameof(StoresController.Index), "Stores");
             }
 
             return View(model: store);
         }
 
-        [Authorize]
         [HttpGet]
-        public IActionResult Numpad(string id)
+        public IActionResult CashRegister(string id)
         {
             var store = _storeService.StoresByUser(owner: User).FirstOrDefault(x => x.Id == id);
             
             if(store == null)
             {
-                return RedirectToAction(nameof(CashRegisterController.Index), "CashRegister");
+                return RedirectToAction(nameof(StoresController.Index), "Stores");
             }
 
             return View(model: store);
         }
 
-        [Authorize]
         [HttpPost]
         public IActionResult CreateStore(CreateStoreModel storeModel)
         {
             if(ModelState.IsValid)
             {
                 var store = _storeService.CreateStore(storeModel.Name, User);
-                return RedirectToAction(nameof(CashRegisterController.Index), "CashRegister", "StoreCreated=" + store.Id);
+                return RedirectToAction(nameof(StoresController.Index), "Stores", "StoreCreated=" + store.Id);
             }
             
-            return RedirectToAction(nameof(CashRegisterController.Index), "CashRegister");
+            return RedirectToAction(nameof(StoresController.Index), "Stores");
         }
 
         public IActionResult Error()

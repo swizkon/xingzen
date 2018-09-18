@@ -12,14 +12,14 @@
             <small>@store.Id</small>
         </h3>
             <a asp-action="Display" asp-route-id="@store.Id">Display</a>
-            <a asp-action="Numpad" asp-route-id="@store.Id">Numpad</a>
+            <a asp-action="CashRegister" asp-route-id="@store.Id">CashRegister</a>
     </div>
 } 
 
 
 <div>
     <h2>Create new store</h2>
-    <form action="/CashRegister/createStore" method="POST">
+    <form action="/Stores/createStore" method="POST">
     <input type="text" name="name"/>
     <input type="submit" />
     </form>

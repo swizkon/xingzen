@@ -17,14 +17,13 @@ namespace sellerproto.Controllers
         
         private readonly ILogger _logger;
 
-        public WalletController(IStoreService storeService, ILogger<CashRegisterController> logger)
+        public WalletController(IStoreService storeService, ILogger<WalletController> logger)
         {
             _storeService = storeService;
             _logger = logger;
         }
 
-        [Authorize]
-        [HttpGet]
+        [Authorize, HttpGet]
         public IActionResult Index()
         {
             var claims = User.Claims?.Select(c => c.Type + ": " + c.Value).ToArray();
@@ -44,37 +43,10 @@ namespace sellerproto.Controllers
             var store = _storeService.StoresByUser(owner: User).FirstOrDefault(x => x.Id == id);
             if(store == null)
             {
-                return RedirectToAction(nameof(CashRegisterController.Index), "CashRegister");
+                return RedirectToAction(nameof(WalletController.Index), "Wallet");
             }
 
             return View(model: store);
-        }
-
-        [Authorize]
-        [HttpGet]
-        public IActionResult Numpad(string id)
-        {
-            var store = _storeService.StoresByUser(owner: User).FirstOrDefault(x => x.Id == id);
-            
-            if(store == null)
-            {
-                return RedirectToAction(nameof(CashRegisterController.Index), "CashRegister");
-            }
-
-            return View(model: store);
-        }
-
-        [Authorize]
-        [HttpPost]
-        public IActionResult CreateStore(CreateStoreModel storeModel)
-        {
-            if(ModelState.IsValid)
-            {
-                var store = _storeService.CreateStore(storeModel.Name, User);
-                return RedirectToAction(nameof(CashRegisterController.Index), "CashRegister", "StoreCreated=" + store.Id);
-            }
-            
-            return RedirectToAction(nameof(CashRegisterController.Index), "CashRegister");
         }
 
         public IActionResult Error()
