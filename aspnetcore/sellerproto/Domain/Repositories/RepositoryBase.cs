@@ -16,13 +16,14 @@ namespace XingZen.Domain.Repositories
         private readonly CloudTable _table;
         private readonly ILogger _logger;
 
-        protected RepositoryBase(IConfiguration configuration, string tableName, ILogger logger)
+        protected RepositoryBase(IConfiguration configuration, ILogger logger)
         {
             _logger = logger;
             var connectionString = configuration["Azure:StorageConnectionString"];
             var cloudStorageAccount = CloudStorageAccount.Parse(connectionString);
             _tableClient = cloudStorageAccount.CreateCloudTableClient();
-            _table = _tableClient.GetTableReference(tableName.ToLower());
+            var tableName = typeof(TDomain).Name.ToLower();
+            _table = _tableClient.GetTableReference(tableName);
             _table.CreateIfNotExistsAsync().Wait();
         }
 

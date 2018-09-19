@@ -14,10 +14,8 @@ namespace XingZen.Domain.Repositories
 
     public class StoreRepository : RepositoryBase<Store, StoreMap> , IRepository<Store>
     {
-        private const string STORES = "stores";
-
         public StoreRepository(IConfiguration configuration, ILogger<StoreRepository> logger)
-            : base(configuration: configuration, tableName: STORES, logger: logger)
+            : base(configuration: configuration, logger: logger)
         {
         }
 
