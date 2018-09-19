@@ -18,6 +18,8 @@ using XingZen.Domain.Repositories;
 using XingZen.Domain.Repositories.Interfaces;
 using XingZen.Domain.Services;
 using XingZen.Domain.Model;
+using XingZen.Infrastructure.Services.Generators.Interfaces;
+using XingZen.Infrastructure.Services.Generators;
 
 namespace sellerproto
 {
@@ -111,6 +113,8 @@ namespace sellerproto
                 options.IdleTimeout = TimeSpan.FromHours(1);
                 options.Cookie.HttpOnly = true;
             });
+
+            services.AddSingleton<IGenerator, PincodeGenerator>();
 
             services.AddSingleton<IRepository<Store>, StoreRepository>();
             services.AddScoped<IStoreService, StoreService>();
