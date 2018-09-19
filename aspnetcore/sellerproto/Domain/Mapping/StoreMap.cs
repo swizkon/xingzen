@@ -8,7 +8,7 @@ namespace XingZen.Domain.Mapping
 
         public string StoreName { get; set; }
         
-        public string DefaultCurrency { get; internal set; }
+        public string DefaultCurrency { get; set; }
 
         public StoreMap()
         {
