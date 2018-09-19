@@ -5,7 +5,7 @@ namespace XingZen.Infrastructure.Services.Generators
 
     public class PincodeGenerator : IGenerator
     {
-        public PincodeGenerator(bool seq)
+        public PincodeGenerator()
         {
         }
 

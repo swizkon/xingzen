@@ -34,7 +34,7 @@ namespace sellerproto.Controllers
         }
 
         [HttpPost]
-        public IActionResult PlacePurchaseOrder([FromBody] PurchaseOrderTask purchaseOrder)
+        public IActionResult PlacePurchaseOrder([FromBody] CreatePurchaseOrderTask purchaseOrder)
         {
             _transactionHub.Clients
                             .Group("Store" + purchaseOrder.StoreId)

@@ -11,7 +11,6 @@ using XingZen.Domain.Repositories.Interfaces;
 
 namespace XingZen.Domain.Repositories
 {
-
     public class StoreRepository : RepositoryBase<Store, StoreMap> , IRepository<Store>
     {
         public StoreRepository(IConfiguration configuration, ILogger<StoreRepository> logger)
@@ -21,7 +20,7 @@ namespace XingZen.Domain.Repositories
 
         protected override Store ToDomainEntity(StoreMap tableEntity)
         {
-            return new Store(id: tableEntity.StoreId, name: tableEntity.StoreName);
+            return new Store(id: tableEntity.StoreId, name: tableEntity.StoreName, defaultCurrency: tableEntity.DefaultCurrency);
         }
 
         protected override StoreMap ToTableEntity(Store domainEntity)
@@ -31,6 +30,7 @@ namespace XingZen.Domain.Repositories
             result.RowKey = domainEntity.Id;
             result.StoreName = domainEntity.Name;
             result.StoreId = domainEntity.Id;
+            result.DefaultCurrency = domainEntity.DefaultCurrency;
 
             return result;
         }

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace sellerproto.Tasks
 {
-    public class PurchaseOrderTask
+    public class CreatePurchaseOrderTask
     {
         [Required]        
         public string StoreId { get; set; }
