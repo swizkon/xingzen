@@ -1,17 +1,15 @@
+
 using System.ComponentModel.DataAnnotations;
 
-namespace sellerproto.Models
+namespace sellerproto.Tasks
 {
-    public class PurchaseOrderModel
+    public class NotifyStoreBalanceTask
     {
         [Required]        
         public string StoreId { get; set; }
 
         [Required]        
-        public string SalesPerson { get; set; }
-
-        [Required]        
-        public decimal Amount { get; set; }
+        public decimal Balance { get; set; }
 
         [Required]        
         public string Currency { get; set; }

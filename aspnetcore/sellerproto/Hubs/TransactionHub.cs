@@ -29,7 +29,6 @@ namespace Hubs
 
         public Task NotifyStoreBalance(string groupName, string amount, string currency)
         {
-            // System.Diagnostics.Trace.WriteLine("Task NotifyStoreBalance(string groupName, decimal amount, string currency)");
             return Clients.Group(groupName).SendAsync("StoreBalanceAdjusted", groupName, amount, currency);
         }
 

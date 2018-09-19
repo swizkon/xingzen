@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace sellerproto.Models
+namespace sellerproto.Tasks
 {
-    public class CreateStoreModel
+    public class CreateStoreTask
     {
         [Required]        
         public string Name { get; set; }

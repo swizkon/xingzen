@@ -5,9 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using QRCoder;
-using sellerproto.Models;
 using Microsoft.AspNetCore.SignalR;
 using Hubs;
+using sellerproto.Tasks;
 
 namespace sellerproto.Controllers
 {
@@ -33,9 +33,8 @@ namespace sellerproto.Controllers
             return new OkObjectResult(message);
         }
 
-
         [HttpPost]
-        public IActionResult PlacePurchaseOrder([FromBody] PurchaseOrderModel purchaseOrder)
+        public IActionResult PlacePurchaseOrder([FromBody] PurchaseOrderTask purchaseOrder)
         {
             _transactionHub.Clients
                             .Group("Store" + purchaseOrder.StoreId)
@@ -45,7 +44,7 @@ namespace sellerproto.Controllers
         }
 
         [HttpPost]
-        public IActionResult NotifyStoreBalance([FromBody] NotifyStoreBalanceModel notifyStoreBalance)
+        public IActionResult NotifyStoreBalance([FromBody] NotifyStoreBalanceTask notifyStoreBalance)
         {
             _transactionHub.Clients
                             .Group("Store" + notifyStoreBalance.StoreId)

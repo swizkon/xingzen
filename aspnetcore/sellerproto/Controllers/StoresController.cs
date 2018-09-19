@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using sellerproto.Models;
+using sellerproto.Tasks;
 using XingZen.Domain.Services;
 
 namespace sellerproto.Controllers
@@ -63,7 +63,7 @@ namespace sellerproto.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateStore(CreateStoreModel storeModel)
+        public IActionResult CreateStore(CreateStoreTask storeModel)
         {
             if(ModelState.IsValid)
             {
@@ -72,11 +72,6 @@ namespace sellerproto.Controllers
             }
             
             return RedirectToAction(nameof(StoresController.Index), "Stores");
-        }
-
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
