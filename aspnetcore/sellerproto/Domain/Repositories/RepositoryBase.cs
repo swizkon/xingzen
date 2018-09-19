@@ -37,8 +37,6 @@ namespace XingZen.Domain.Repositories
             var tableEntity = ToTableEntity(domainEntity);
             tableEntity.PartitionKey = partition.ToString();
             var result = await _table.ExecuteAsync(TableOperation.Insert(tableEntity));
-
-            // _logger.LogInformation(result);
         }
 
         public Task<IEnumerable<TDomain>> All(object partition)

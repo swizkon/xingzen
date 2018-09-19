@@ -5,9 +5,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
-using XingZen.Domain.Mapping;
 using XingZen.Domain.Model;
 using XingZen.Domain.Repositories.Interfaces;
+using XingZen.Domain.Mapping;
 
 namespace XingZen.Domain.Repositories
 {

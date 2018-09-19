@@ -117,6 +117,7 @@ namespace sellerproto
             services.AddSingleton<IGenerator, PincodeGenerator>();
 
             services.AddSingleton<IRepository<Store>, StoreRepository>();
+            services.AddSingleton<IRepository<PurchaseOrder>, PurchaseOrderRepository>();
             services.AddScoped<IStoreService, StoreService>();
 
             services.AddLogging();
