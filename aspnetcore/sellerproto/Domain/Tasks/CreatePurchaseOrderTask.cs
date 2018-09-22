@@ -5,14 +5,14 @@ namespace sellerproto.Tasks
 {
     public class CreatePurchaseOrderTask
     {
-        [Required]        
+        [Required]
         public string StoreId { get; set; }
 
         [Required]        
         public string SalesPerson { get; set; }
 
         [Required]        
-        public decimal Amount { get; set; }
+        public double Amount { get; set; }
 
         [Required]        
         public string Currency { get; set; }

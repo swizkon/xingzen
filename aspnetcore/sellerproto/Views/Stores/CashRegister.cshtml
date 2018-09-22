@@ -11,7 +11,8 @@
 <form id="register" onsubmit="this.reset">
     <input type="tel" name="amount" id="amount" class="input input-lg" />
     <input type="hidden" name="currency" value="SEK" />
-    <input type="hidden" name="store" value="@Model.Id" />
+    <input type="hidden" name="storeId" value="@Model.Id" />
+    <input type="hidden" name="salesPerson" value="Sales person" />
     <input type="submit"  class="input input-lg"/>
 </form>
 
@@ -87,10 +88,11 @@
         });
 
         $('#register').on('submit', function(e){
-            var amount = e.target.querySelector("input[name='amount']");
-            
-            connection.send('RegisterPurchaseOrder', 'Store' + store, 'Order-' + Math.floor(Math.random() * 1000), amount.value, 'SEK');
-            e.preventDefault();
+
+            sendPurchaseOrderTask(e.target);
+            // var amount = e.target.querySelector("input[name='amount']");
+            // connection.send('RegisterPurchaseOrder', 'Store' + store, 'Order-' + Math.floor(Math.random() * 1000), amount.value, 'SEK');
+            // e.preventDefault();
             e.target.reset();
             return false;
         })
