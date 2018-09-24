@@ -70,7 +70,7 @@ namespace sellerproto.Controllers
             //                                 amount: purchaseOrder.Amount,
             //                               currency: purchaseOrder.Currency);
 
-            // purchaseOrderRepository.Add(purchaseOrder.StoreId, order);
+            // depositRepository.Add(purchaseOrder.StoreId, order);
 
             var deposit = new{
                     DepositId =  _generator.Next().ToString(),
@@ -78,12 +78,7 @@ namespace sellerproto.Controllers
                     Amount = depositTask.Amount,
                     Currency = depositTask.Currency
             };
-            //  new PurchaseOrder(purchaseOrderId: _generator.Next().ToString(),
-            //                                 storeId: purchaseOrder.StoreId,
-            //                                 salesPerson: purchaseOrder.SalesPerson,
-            //                                 amount: purchaseOrder.Amount,
-            //                               currency: purchaseOrder.Currency);
-
+            
             _transactionHub.Clients
                             .Group("Wallet" + deposit.WalletId)
                             .SendCoreAsync("WalletDepositRegistered", new object[] { deposit.WalletId, deposit.DepositId, deposit.Amount, deposit.Currency });
