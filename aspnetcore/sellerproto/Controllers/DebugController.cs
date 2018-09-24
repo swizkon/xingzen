@@ -41,6 +41,19 @@ namespace sellerproto.Controllers
             return View(model: id);
         }
 
+        [HttpGet]
+        public IActionResult WalletDemo(string id = "DefaultWallet")
+        {
+            ViewData["WalletId"] = id;
+            return View(model: id);
+        }
+
+        [HttpGet]
+        public IActionResult DepositDemo(string id = "DefaultWallet")
+        {
+            return View(model: id);
+        }
+
         public async Task<IActionResult> PurchaseOrders(string id)
         {
             var model = await _purchaseOrderRepository.All(id);

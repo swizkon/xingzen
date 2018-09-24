@@ -11,6 +11,7 @@ using XingZen.Domain.Services;
 
 namespace sellerproto.Controllers
 {
+    [Authorize]
     public class WalletController : Controller
     {
         private readonly IStoreService _storeService;
@@ -21,6 +22,12 @@ namespace sellerproto.Controllers
         {
             _storeService = storeService;
             _logger = logger;
+        }
+
+        public override void OnActionExecuting(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext context)
+        {
+            base.OnActionExecuting(context);
+            ViewData["mode"] = "embedded";
         }
 
         [Authorize, HttpGet]
@@ -36,7 +43,6 @@ namespace sellerproto.Controllers
             return View(model: stores);
         }
 
-        [Authorize]
         [HttpGet]
         public IActionResult Display(string id)
         {
