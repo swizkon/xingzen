@@ -45,6 +45,8 @@ namespace sellerproto.Controllers
             {
                 return RedirectToAction(nameof(StoresController.Index), "Stores");
             }
+            
+            ViewData["mode"] = Request.Query["mode"].FirstOrDefault();
 
             return View(model: store);
         }

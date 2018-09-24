@@ -55,8 +55,8 @@ namespace sellerproto.Controllers
             purchaseOrderRepository.Add(purchaseOrder.StoreId, order);
 
             _transactionHub.Clients
-                            .Group("Store" + purchaseOrder.StoreId)
-                            .SendCoreAsync("PurchaseOrderRegistered", new object[] { purchaseOrder.StoreId, purchaseOrder.Amount, purchaseOrder.Currency });
+                            .Group("Store" + order.StoreId)
+                            .SendCoreAsync("PurchaseOrderRegistered", new object[] { order.StoreId, order.PurchaseOrderId, order.Amount, order.Currency });
 
             return new OkObjectResult(purchaseOrder);
         }
