@@ -51,7 +51,6 @@ namespace sellerproto.Controllers
                                             amount: purchaseOrder.Amount,
                                           currency: purchaseOrder.Currency);
 
-
             purchaseOrderRepository.Add(purchaseOrder.StoreId, order);
 
             _transactionHub.Clients

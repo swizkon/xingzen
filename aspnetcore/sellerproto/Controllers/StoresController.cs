@@ -40,13 +40,13 @@ namespace sellerproto.Controllers
         [HttpGet]
         public IActionResult Display(string id)
         {
+            ViewData["mode"] = Request.Query["mode"].FirstOrDefault();
+
             var store = _storeService.StoresByUser(owner: User).FirstOrDefault(x => x.Id == id);
             if(store == null)
             {
                 return RedirectToAction(nameof(StoresController.Index), "Stores");
             }
-            
-            ViewData["mode"] = Request.Query["mode"].FirstOrDefault();
 
             return View(model: store);
         }
@@ -54,6 +54,8 @@ namespace sellerproto.Controllers
         [HttpGet]
         public IActionResult CashRegister(string id)
         {
+            ViewData["mode"] = Request.Query["mode"].FirstOrDefault();
+
             var store = _storeService.StoresByUser(owner: User).FirstOrDefault(x => x.Id == id);
             
             if(store == null)

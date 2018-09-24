@@ -19,7 +19,7 @@ namespace sellerproto.Controllers
         private readonly IStoreService _storeService;
 
         private readonly IRepository<PurchaseOrder> _purchaseOrderRepository;
- 
+
         private readonly ILogger _logger;
 
         public DebugController(IStoreService storeService, IRepository<PurchaseOrder> purchaseOrderRepository, ILogger<DebugController> logger)
@@ -29,10 +29,32 @@ namespace sellerproto.Controllers
             _logger = logger;
         }
 
-        public async Task<IActionResult> PurchaseOrders()
+        public override void OnActionExecuting(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext context)
         {
-            var model = await _purchaseOrderRepository.All(3806);
+            base.OnActionExecuting(context);
+            ViewData["mode"] = "embedded";
+        }
+
+        [HttpGet]
+        public IActionResult StoreDemo(string id = "2250")
+        {
+            return View(model: id);
+        }
+
+        public async Task<IActionResult> PurchaseOrders(string id)
+        {
+            var model = await _purchaseOrderRepository.All(id);
             return View(model: model.ToList());
+        }
+
+        public async Task<IActionResult> PurchaseOrderDetails(string storeId, string purchaseOrderId)
+        {
+            var orders = await _purchaseOrderRepository.All(storeId);
+
+            var order = await _purchaseOrderRepository.Find(storeId, purchaseOrderId);
+            _logger.LogInformation(order?.PurchaseOrderId);
+            var model = order ?? orders.FirstOrDefault(x => x.PurchaseOrderId == purchaseOrderId);
+            return View(model: model);
         }
     }
 }

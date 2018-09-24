@@ -67,7 +67,10 @@ namespace XingZen.Domain.Repositories
             var query = new TableQuery<TMapping>();
             
             var data = await _table.ExecuteQuerySegmentedAsync<TMapping>(query, null);
-            return data.Results.Where(x => x.PartitionKey == partition.ToString()).Select(ToDomainEntity);
+            return data.Results
+                        .Where(x => x.PartitionKey == partition.ToString())
+                        .Select(ToDomainEntity)
+                        .ToArray();
         }
     }
 }
