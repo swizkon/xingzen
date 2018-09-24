@@ -4,13 +4,13 @@ namespace XingZen.Domain.Mapping
 {
     public class DepositMap : TableEntity
     {
-        public string DepositId { get; }
+        public string DepositId { get; set; }
 
-        public string WalletId { get; }
+        public string WalletId { get;set;  }
 
-        public decimal Amount { get; }
+        public decimal Amount { get;set;  }
 
-        public string Currency { get; }
+        public string Currency { get; set; }
 
         public DepositMap()
         {

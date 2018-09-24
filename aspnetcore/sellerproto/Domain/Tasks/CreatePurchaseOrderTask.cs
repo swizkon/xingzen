@@ -24,7 +24,7 @@ namespace sellerproto.Tasks
         public string WalletId { get; set; }
 
         [Required]        
-        public double Amount { get; set; }
+        public decimal Amount { get; set; }
 
         [Required]        
         public string Currency { get; set; }

@@ -17,14 +17,16 @@ namespace sellerproto.Controllers
     public class TransactionsController : Controller
     {
         private readonly IRepository<PurchaseOrder> purchaseOrderRepository;
+        private readonly IRepository<Deposit> _depositRepository;
 
         private readonly IGenerator _generator;
 
         private readonly IHubContext<TransactionHub> _transactionHub;
 
-        public TransactionsController(IRepository<PurchaseOrder> purchaseOrderRepository, IGenerator generator, IHubContext<TransactionHub> transactionHub)
+        public TransactionsController(IRepository<PurchaseOrder> purchaseOrderRepository, IRepository<Deposit> depositRepository, IGenerator generator, IHubContext<TransactionHub> transactionHub)
         {
             this.purchaseOrderRepository = purchaseOrderRepository;
+            _depositRepository = depositRepository;
             _generator = generator;
             _transactionHub = transactionHub;
         }
@@ -64,20 +66,13 @@ namespace sellerproto.Controllers
         [HttpPost]
         public IActionResult MakeDeposit([FromBody] MakeDepositTask depositTask)
         {
-            // var order = new PurchaseOrder(purchaseOrderId: _generator.Next().ToString(),
-            //                                 storeId: purchaseOrder.StoreId,
-            //                                 salesPerson: purchaseOrder.SalesPerson,
-            //                                 amount: purchaseOrder.Amount,
-            //                               currency: purchaseOrder.Currency);
+            var deposit = new Deposit(
+                    depositId:  _generator.Next().ToString(),
+                    walletId: depositTask.WalletId,
+                    amount: depositTask.Amount,
+                    currency: depositTask.Currency);
 
-            // depositRepository.Add(purchaseOrder.StoreId, order);
-
-            var deposit = new{
-                    DepositId =  _generator.Next().ToString(),
-                    WalletId = depositTask.WalletId,
-                    Amount = depositTask.Amount,
-                    Currency = depositTask.Currency
-            };
+            _depositRepository.Add(deposit.WalletId, deposit);
             
             _transactionHub.Clients
                             .Group("Wallet" + deposit.WalletId)
