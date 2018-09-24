@@ -60,6 +60,37 @@ namespace sellerproto.Controllers
             return new OkObjectResult(purchaseOrder);
         }
 
+
+        [HttpPost]
+        public IActionResult MakeDeposit([FromBody] MakeDepositTask depositTask)
+        {
+            // var order = new PurchaseOrder(purchaseOrderId: _generator.Next().ToString(),
+            //                                 storeId: purchaseOrder.StoreId,
+            //                                 salesPerson: purchaseOrder.SalesPerson,
+            //                                 amount: purchaseOrder.Amount,
+            //                               currency: purchaseOrder.Currency);
+
+            // purchaseOrderRepository.Add(purchaseOrder.StoreId, order);
+
+            var deposit = new{
+                    DepositId =  _generator.Next().ToString(),
+                    WalletId = depositTask.WalletId,
+                    Amount = depositTask.Amount,
+                    Currency = depositTask.Currency
+            };
+            //  new PurchaseOrder(purchaseOrderId: _generator.Next().ToString(),
+            //                                 storeId: purchaseOrder.StoreId,
+            //                                 salesPerson: purchaseOrder.SalesPerson,
+            //                                 amount: purchaseOrder.Amount,
+            //                               currency: purchaseOrder.Currency);
+
+            _transactionHub.Clients
+                            .Group("Wallet" + deposit.WalletId)
+                            .SendCoreAsync("WalletDepositRegistered", new object[] { deposit.WalletId, deposit.DepositId, deposit.Amount, deposit.Currency });
+
+            return new OkObjectResult(deposit);
+        }
+
         [HttpPost]
         public IActionResult NotifyStoreBalance([FromBody] NotifyStoreBalanceTask notifyStoreBalance)
         {

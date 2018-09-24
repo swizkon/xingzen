@@ -55,6 +55,18 @@ namespace sellerproto.Controllers
             return View(model: store);
         }
 
+        [HttpGet]
+        public IActionResult Scanner(string id)
+        {
+            // var store = _storeService.StoresByUser(owner: User).FirstOrDefault(x => x.Id == id);
+            // if(store == null)
+            // {
+            //     return RedirectToAction(nameof(WalletController.Index), "Wallet");
+            // }
+
+            return View(model: id);
+        }
+
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });

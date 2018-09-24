@@ -37,7 +37,7 @@ namespace sellerproto.Controllers
 
         [HttpGet]
         public IActionResult StoreDemo(string id = "2250")
-        {
+        { 
             return View(model: id);
         }
 
@@ -51,6 +51,7 @@ namespace sellerproto.Controllers
         [HttpGet]
         public IActionResult DepositDemo(string id = "DefaultWallet")
         {
+            ViewData["WalletId"] = id;
             return View(model: id);
         }
 

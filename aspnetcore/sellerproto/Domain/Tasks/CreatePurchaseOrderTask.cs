@@ -17,4 +17,16 @@ namespace sellerproto.Tasks
         [Required]        
         public string Currency { get; set; }
     }
+
+    public class MakeDepositTask
+    {
+        [Required]
+        public string WalletId { get; set; }
+
+        [Required]        
+        public double Amount { get; set; }
+
+        [Required]        
+        public string Currency { get; set; }
+    }
 }
