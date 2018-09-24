@@ -25,7 +25,7 @@ namespace XingZen.Domain.Repositories
         protected override DepositMap ToTableEntity(Deposit domainEntity)
         {
             var result = new DepositMap();
-            result.RowKey = domainEntity.WalletId;
+            result.RowKey = domainEntity.DepositId;
             result.Amount = domainEntity.Amount;
             result.WalletId = domainEntity.WalletId;
             result.Currency = domainEntity.Currency;

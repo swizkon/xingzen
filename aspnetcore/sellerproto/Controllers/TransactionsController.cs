@@ -64,19 +64,34 @@ namespace sellerproto.Controllers
 
 
         [HttpPost]
-        public IActionResult MakeDeposit([FromBody] MakeDepositTask depositTask)
+        public async Task<IActionResult> MakeDeposit([FromBody] MakeDepositTask depositTask)
         {
             var deposit = new Deposit(
-                    depositId:  _generator.Next().ToString(),
+                    depositId: _generator.Next().ToString(),
                     walletId: depositTask.WalletId,
                     amount: depositTask.Amount,
                     currency: depositTask.Currency);
 
-            _depositRepository.Add(deposit.WalletId, deposit);
+            await _depositRepository.Add(deposit.WalletId, deposit);
             
             _transactionHub.Clients
                             .Group("Wallet" + deposit.WalletId)
                             .SendCoreAsync("WalletDepositRegistered", new object[] { deposit.WalletId, deposit.DepositId, deposit.Amount, deposit.Currency });
+
+            var deposits = await _depositRepository.All(deposit.WalletId);
+            // var 
+            var newBAlance = deposits.Select(x => x.Amount).Sum();
+
+            _transactionHub.Clients
+                            .Group("Wallet" + deposit.WalletId)
+                            .SendCoreAsync("WalletDepositRegistered", new object[] { deposit.WalletId, deposit.DepositId, newBAlance, deposit.Currency });
+
+            // _transactionHub.Clients
+            //                 .Group("Wallet" + deposit.WalletId)
+            //                 .SendCoreAsync("WalletDepositRegistered", new object[] { deposit.WalletId, deposit.DepositId, deposit.Amount, deposit.Currency });
+
+
+            // return View(model: model.ToList());
 
             return new OkObjectResult(deposit);
         }
