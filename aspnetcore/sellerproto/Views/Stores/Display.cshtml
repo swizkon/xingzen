@@ -59,9 +59,11 @@
                     close: true,
                     }).showToast();
             */
+            /*
             setTimeout(function(){
                 connection.send('AcceptPurchaseOrder', 'Store' + store, orderId, amount, currency);
             }, 2000);
+            */
         });
         
         connection.on("PurchaseOrderAccepted", function (groupName, orderId, amount, currency) {

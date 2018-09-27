@@ -15,12 +15,12 @@ namespace Hubs
         {
             await Clients.All.SendAsync("SendAction", Context.User.Identity.Name, "left");
         }
-        
+
         public Task Send(string message)
         {
             return Clients.All.SendAsync("Send", message);
         }
-        
+
         public Task Notify(string message)
         {
             System.Diagnostics.Trace.WriteLine("Task Notify(string message)");
@@ -40,6 +40,11 @@ namespace Hubs
         public Task AcceptPurchaseOrder(string groupName, string orderId, decimal amount, string currency)
         {
             return Clients.Group(groupName).SendAsync("PurchaseOrderAccepted", groupName, orderId, amount, currency);
+        }
+
+        public Task InitiatePurchaseCheckout(string groupName, string orderId)
+        {
+            return Clients.Group(groupName).SendAsync("PurchaseCheckoutInitiated", groupName, orderId);
         }
 
         public void Subscribe(string groupName)

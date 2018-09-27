@@ -55,6 +55,13 @@ namespace sellerproto.Controllers
             return View(model: id);
         }
 
+        public IActionResult ScannerDemo(string id)
+        {
+            // var model = await _purchaseOrderRepository.All(id);
+            // return View(model: model.ToList());
+            return View(model: id);
+        }
+
         public async Task<IActionResult> PurchaseOrders(string id)
         {
             var model = await _purchaseOrderRepository.All(id);
