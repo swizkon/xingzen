@@ -3,16 +3,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace sellerproto.Tasks
 {
-    public class CreatePurchaseOrderTask
+    public class MakeDepositTask
     {
         [Required]
-        public string StoreId { get; set; }
+        public string WalletId { get; set; }
 
         [Required]        
-        public string SalesPerson { get; set; }
-
-        [Required]        
-        public double Amount { get; set; }
+        public decimal Amount { get; set; }
 
         [Required]        
         public string Currency { get; set; }

@@ -79,7 +79,7 @@ namespace sellerproto.Controllers
                             .SendCoreAsync("WalletDepositRegistered", new object[] { deposit.WalletId, deposit.DepositId, deposit.Amount, deposit.Currency });
 
             var deposits = await _depositRepository.All(deposit.WalletId);
-            // var 
+            
             var newBAlance = deposits.Select(x => x.Amount).Sum();
 
             await _transactionHub.Clients
