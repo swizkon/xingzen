@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using XingZen.Domain.Mapping;
@@ -17,7 +18,7 @@ namespace XingZen.Domain.Repositories
         {
             return new Deposit(depositId: tableEntity.DepositId,
             walletId: tableEntity.WalletId,
-             amount: tableEntity.Amount,
+             amount: Convert.ToDecimal(tableEntity.Amount),
              currency: tableEntity.Currency);
 
         }
@@ -26,7 +27,7 @@ namespace XingZen.Domain.Repositories
         {
             var result = new DepositMap();
             result.RowKey = domainEntity.DepositId;
-            result.Amount = domainEntity.Amount;
+            result.Amount = (double) domainEntity.Amount;
             result.WalletId = domainEntity.WalletId;
             result.Currency = domainEntity.Currency;
             result.DepositId = domainEntity.DepositId;

@@ -74,7 +74,7 @@ namespace sellerproto.Controllers
 
             await _depositRepository.Add(deposit.WalletId, deposit);
             
-            _transactionHub.Clients
+            await _transactionHub.Clients
                             .Group("Wallet" + deposit.WalletId)
                             .SendCoreAsync("WalletDepositRegistered", new object[] { deposit.WalletId, deposit.DepositId, deposit.Amount, deposit.Currency });
 
@@ -82,16 +82,9 @@ namespace sellerproto.Controllers
             // var 
             var newBAlance = deposits.Select(x => x.Amount).Sum();
 
-            _transactionHub.Clients
+            await _transactionHub.Clients
                             .Group("Wallet" + deposit.WalletId)
                             .SendCoreAsync("WalletDepositRegistered", new object[] { deposit.WalletId, deposit.DepositId, newBAlance, deposit.Currency });
-
-            // _transactionHub.Clients
-            //                 .Group("Wallet" + deposit.WalletId)
-            //                 .SendCoreAsync("WalletDepositRegistered", new object[] { deposit.WalletId, deposit.DepositId, deposit.Amount, deposit.Currency });
-
-
-            // return View(model: model.ToList());
 
             return new OkObjectResult(deposit);
         }
