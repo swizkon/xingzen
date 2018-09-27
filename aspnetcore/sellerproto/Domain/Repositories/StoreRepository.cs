@@ -26,7 +26,6 @@ namespace XingZen.Domain.Repositories
         protected override StoreMap ToTableEntity(Store domainEntity)
         {
             var result = new StoreMap();
-            result.PartitionKey = "stores";
             result.RowKey = domainEntity.Id;
             result.StoreName = domainEntity.Name;
             result.StoreId = domainEntity.Id;

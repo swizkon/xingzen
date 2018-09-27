@@ -1,0 +1,67 @@
+﻿@model String
+@{
+    ViewData["Title"] = ViewData["WalletId"] ??  "DefaultWallet";
+
+    var walletId = ViewData["Title"];
+}
+
+<h3>@ViewData["Title"] <small>Scanner demo</small></h3>
+
+<form id="deposit" onsubmit="this.reset">
+
+    <input class="input input-md" type="range" id="amount" name="amount" min="0" value="500" max="1000" step="10" oninput="outputUpdate(value)">
+    <output class="input input-lg" for="amount" id="volume">500</output>
+
+    <input type="hidden" name="currency" id="currency" value="SEK" />
+    <input type="hidden" name="walletId" value="@walletId" />
+    <input type="submit"  class="input input-lg"/>
+</form>
+
+@section scripts {
+    <script>
+        function outputUpdate(vol) {
+            document.querySelector('#volume').value = vol;
+        }
+
+    var walletId = '@walletId';
+    var connection;
+    
+    $(document).ready(function(){
+        connection = connection = new signalR.HubConnectionBuilder()
+                                             .withUrl("/transactionHub")
+                                             .configureLogging(signalR.LogLevel.Information)
+                                             .build();
+
+        connection.on("WalletDepositRegistered", function (walletId, depositId, amount, currency) {
+            Toastify({
+                    text: "WalletDepositRegistered: " + amount + " " + currency,
+                    duration: 1000,
+                    gravity: "bottom",
+                    positionLeft: false,
+                    close: true,
+                    }).showToast();
+        });
+        
+        connection.on("WalletDepositConfirmed", function (walletId, depositId, amount, currency) {
+            
+            Toastify({
+                    text: "Confirmed: " + amount + " " + currency,
+                    duration: 3000,
+                    gravity: "bottom",
+                    positionLeft: false,
+                    close: true,
+                    }).showToast();
+        });
+            
+        connection.start().then(function() {
+            connection.send('Subscribe', 'Wallet' + walletId);
+        });
+
+        $('#deposit').on('submit', function(e){
+            sendDepositTask(e.target);
+            e.target.reset();
+            return false;
+        })
+    });
+    </script>
+}

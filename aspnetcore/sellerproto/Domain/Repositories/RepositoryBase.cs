@@ -54,13 +54,13 @@ namespace XingZen.Domain.Repositories
                                 .FirstOrDefault();
         }
 
-        private async Task<TMapping> Put(object partition, TDomain domainEntity)
-        {
-            var tableEntity = ToTableEntity(domainEntity);
-            tableEntity.PartitionKey = partition.ToString();
-            var result = await _table.ExecuteAsync(TableOperation.Insert(tableEntity));
-            return (TMapping)result.Result;
-        }
+        // private async Task<TMapping> Put(object partition, TDomain domainEntity)
+        // {
+        //     var tableEntity = ToTableEntity(domainEntity);
+        //     tableEntity.PartitionKey = partition.ToString();
+        //     var result = await _table.ExecuteAsync(TableOperation.Insert(tableEntity));
+        //     return (TMapping)result.Result;
+        // }
 
         private async Task<IEnumerable<TDomain>> GetAllDomainEntities(object partition)
         {
