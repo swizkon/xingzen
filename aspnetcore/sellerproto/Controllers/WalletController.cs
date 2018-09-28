@@ -73,6 +73,10 @@ namespace sellerproto.Controllers
         [HttpGet]
         public IActionResult Scanner(string id)
         {
+            var email = User.Claims.FirstOrDefault(c => c.Type == "emails")?.Value ?? "user@example.com";
+           
+            ViewData["Buyer"] = Infra.HashingUtil.CalculateMD5Hash( email.ToLower());
+
             return View(model: id);
         }
 

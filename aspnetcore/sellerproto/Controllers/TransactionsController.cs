@@ -64,6 +64,41 @@ namespace sellerproto.Controllers
 
 
         [HttpPost]
+        public IActionResult AcceptPurchase([FromBody] AcceptPurchaseTask purchaseOrder)
+        {
+            /*
+            var order = new PurchaseOrder(purchaseOrderId: _generator.Next().ToString(),
+                                            storeId: purchaseOrder.StoreId,
+                                            salesPerson: purchaseOrder.SalesPerson,
+                                            amount: purchaseOrder.Amount,
+                                          currency: purchaseOrder.Currency);
+            */
+            // purchaseOrderRepository.Add(purchaseOrder.StoreId, order);
+
+            _transactionHub.Clients
+                            .Group("Store" + purchaseOrder.StoreId)
+                            .SendCoreAsync("PurchaseOrderAccepted",
+                                        new object[] { purchaseOrder.StoreId,
+                                                    purchaseOrder.PurchaseOrderId,
+                                                     purchaseOrder.WalletId,
+                                                     purchaseOrder.Amount,
+                                                     purchaseOrder.Currency,
+                                                     purchaseOrder.Buyer });
+
+            _transactionHub.Clients
+                            .Group("Wallet" + purchaseOrder.WalletId)
+                            .SendCoreAsync("PurchaseOrderAccepted",
+                                        new object[] { purchaseOrder.StoreId,
+                                                     purchaseOrder.PurchaseOrderId,
+                                                     purchaseOrder.WalletId,
+                                                     purchaseOrder.Amount,
+                                                     purchaseOrder.Currency,
+                                                     purchaseOrder.Buyer });
+
+            return new OkObjectResult(purchaseOrder);
+        }
+
+        [HttpPost]
         public async Task<IActionResult> MakeDeposit([FromBody] MakeDepositTask depositTask)
         {
             var deposit = new Deposit(
@@ -73,13 +108,13 @@ namespace sellerproto.Controllers
                     currency: depositTask.Currency);
 
             await _depositRepository.Add(deposit.WalletId, deposit);
-            
+
             await _transactionHub.Clients
                             .Group("Wallet" + deposit.WalletId)
                             .SendCoreAsync("WalletDepositRegistered", new object[] { deposit.WalletId, deposit.DepositId, deposit.Amount, deposit.Currency });
 
             var deposits = await _depositRepository.All(deposit.WalletId);
-            
+
             var newBAlance = deposits.Select(x => x.Amount).Sum();
 
             await _transactionHub.Clients

@@ -3,44 +3,101 @@
     ViewData["Title"] = ViewData["WalletId"] ??  "DefaultWallet";
 
     var walletId = ViewData["Title"];
+    
+    var buyer = ViewData["Buyer"]?.ToString();
 }
 
 <h3>Scanner <small>@ViewData["Title"] demo</small></h3>
 
-<form id="acceptorder" onsubmit="this.reset">
-    <input type="hidden" name="currency" id="currency" value="SEK" />
-    <input type="hidden" name="walletId" value="@walletId" />
-    <input type="submit" value="OK"  class="input input-lg"/>
-</form>
+
+<div id="waiting">
+    <h1>Scanna en kod</h1>
+</div>
+
+
+<div id="confirm_purchase">
+    
+    <div class="row">
+        <div class="col-xs-6 col-xs-offset-3">
+            <h3>Godkänn&nbsp;betalning</h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-centered col-xs-6 col-xs-offset-3">
+            <h1><span id="amount"></span> <small id="currency"></small></h1>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-centered col-xs-6 col-xs-offset-3 center">
+            <img id="avatar" src="about:blank" class="img-circle" />
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-xs-6 col-xs-offset-3">
+            <form id="acceptorder" onsubmit="this.reset">
+                <input type="hidden" name="storeid" id="store_id" />
+                <input type="hidden" name="purchaseOrderId" id="purchase_order_id" />
+                <input type="hidden" name="amount" id="amount" value="0" />
+                <input type="hidden" name="currency" id="currency" value="SEK" />
+                <input type="hidden" name="walletId" value="@walletId" />
+                <input type="hidden" name="buyer" value="@buyer" />
+                <input type="submit" value="OK" class="input input-lg input-default"/>
+                <input type="reset" value="Avbryt"  class="input input-lg"/>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 @section scripts {
     <script>
+        
+    function createConfirmScreen(amount, currency, salesPerson, storeId, orderId) {
+        $('#amount').text(amount);
+        $('#currency').text(currency);
+        $('#avatar').attr('src', 'https://www.gravatar.com/avatar/' + salesPerson + '?d=mm&s=150');
+        
+        var qrdata = "amount=" + amount + "&currency=" + currency + "&store=" + storeId + "&order=" + orderId;
+        $('#qr').attr('src', '/transactions/qrcode?data=' + encodeURIComponent(qrdata));
+        $("#confirm_purchase").fadeIn();
+        $("#waiting").fadeOut();
+    }
         
     var walletId = '@walletId';
     var connection;
     
     $(document).ready(function(){
+        
+            $("#waiting").hide();
+            $("#confirm_purchase").hide();
+            $("#waiting").fadeIn();
+
+        createConfirmScreen(25, "SEK", "205e460b479e2e5b48aec07710c08d50", 1, 1);
+        
         connection = connection = new signalR.HubConnectionBuilder()
                                              .withUrl("/transactionHub")
                                              .configureLogging(signalR.LogLevel.Information)
                                              .build();
                                              
         connection.on("PurchaseCheckoutInitiated", function (walletId, storeid, orderid) {
-            Toastify({
-                    text: "PurchaseCheckoutInitiated: " + storeid + " " + orderid,
-                    duration: 1000,
-                    gravity: "bottom",
-                    positionLeft: false,
-                    close: true,
-                    }).showToast();
+
+            $("#waiting").fadeOut();
+            var detailsUrl = "/Debug/PurchaseOrderDetails?storeid=" + storeid + "&purchaseOrderId=" + orderid;
+
+            $.getJSON(detailsUrl, function(d){
+                createConfirmScreen(d.amount, d.currency, d.salesPerson, d.storeId, d.orderId);
+            });
         });
         
         connection.start().then(function() {
             connection.send('Subscribe', 'Wallet' + walletId);
         });
 
-        $('#acceptorder').on('submit', function(e){
-            sendDepositTask(e.target);
+        $('#acceptorder').on('submit', function(e) {
+            sendAcceptPurchaseTask(e.target);
             e.target.reset();
             return false;
         })

@@ -6,11 +6,19 @@ function sendPurchaseOrderTask(formComponent)
     sendJson("/Transactions/PlacePurchaseOrder", objectifyForm(data));
 }
 
+
+function sendAcceptPurchaseTask(formComponent)
+{
+    var data = $(formComponent).serializeArray();
+    sendJson("/Transactions/AcceptPurchase", objectifyForm(data));
+}
+
 function sendDepositTask(formComponent)
 {
     var data = $(formComponent).serializeArray();
     sendJson("/Transactions/MakeDeposit", objectifyForm(data));
 }
+
 
 function sendJson(url, data)
 {

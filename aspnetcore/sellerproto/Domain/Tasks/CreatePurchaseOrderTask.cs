@@ -17,4 +17,7 @@ namespace sellerproto.Tasks
         [Required]        
         public string Currency { get; set; }
     }
+
+
+    
 }
