@@ -1,9 +1,9 @@
 ﻿@model IList<sellerproto.ViewModels.WalletBalance>
 @{
-    ViewData["Title"] = "Wallet";
+    ViewData["Title"] = "Assets";
 }
 
-<h3>@ViewData["Title"]</h3>
+<h4>@ViewData["Title"] <small>DefaultWallet demo</small></h4>
 
 @foreach (var walletBalance in Model) {
     <div>
@@ -13,15 +13,6 @@
         </h3>
     </div>
 } 
-
-
-<div>
-    <h2>Create new wallet</h2>
-    <form action="/Wallet/createWallet" method="POST">
-    <input type="text" name="name"/>
-    <input type="submit" />
-    </form>
-</div>
 
 
 <div>    

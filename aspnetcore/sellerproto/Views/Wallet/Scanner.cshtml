@@ -11,7 +11,29 @@
 
 
 <div id="waiting">
-    <h1>Scanna en kod</h1>
+    <div class="row">
+        <div class="col-xs-6 col-xs-offset-3">
+            <h3>Scanna en kod</h3>
+            <div class="well">
+                Registrera köp i kassan...
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="purchase_confirmed">
+    
+    <div class="row">
+        <div class="col-xs-6 col-xs-offset-3">
+            <h3>Köpet bekräftat</h3>
+            <div class="well">
+                DU BETALADE X TILL Y
+            </div>
+            <input type="button" id="reset_scanner" value="Scanna igen" class="input input-lg input-default"/>
+        </div>
+    </div>
+
 </div>
 
 
@@ -19,13 +41,13 @@
     
     <div class="row">
         <div class="col-xs-6 col-xs-offset-3">
-            <h3>Godkänn&nbsp;betalning</h3>
+            <h3>Bekräfta&nbsp;köp</h3>
         </div>
     </div>
 
     <div class="row">
         <div class="col-centered col-xs-6 col-xs-offset-3">
-            <h1><span id="amount"></span> <small id="currency"></small></h1>
+            <h1><span id="amount_label"></span> <small id="currency_label"></small></h1>
         </div>
     </div>
     
@@ -56,8 +78,16 @@
     <script>
         
     function createConfirmScreen(amount, currency, salesPerson, storeId, orderId) {
-        $('#amount').text(amount);
-        $('#currency').text(currency);
+        
+        $('#store_id').val(storeId);
+        $('#purchase_order_id').val(orderId);
+
+        $('#currency').val(currency);
+        $('#currency_label').text(currency);
+
+        $('#amount').val(amount);
+        $('#amount_label').text(amount);
+
         $('#avatar').attr('src', 'https://www.gravatar.com/avatar/' + salesPerson + '?d=mm&s=150');
         
         var qrdata = "amount=" + amount + "&currency=" + currency + "&store=" + storeId + "&order=" + orderId;
@@ -65,18 +95,28 @@
         $("#confirm_purchase").fadeIn();
         $("#waiting").fadeOut();
     }
+    
+    function resetScanner()
+    {
+        $("#confirm_purchase").fadeOut();
+        $("#purchase_confirmed").fadeOut();
+        $("#waiting").fadeIn();
+    }
         
     var walletId = '@walletId';
     var connection;
     
     $(document).ready(function(){
         
-            $("#waiting").hide();
-            $("#confirm_purchase").hide();
-            $("#waiting").fadeIn();
+        $("#waiting").hide();
+        $("#confirm_purchase").hide();
+        $("#purchase_confirmed").hide();
+        $("#waiting").fadeIn();
 
-        createConfirmScreen(25, "SEK", "205e460b479e2e5b48aec07710c08d50", 1, 1);
-        
+        $('#reset_scanner').click(function(){
+            resetScanner();
+        });
+
         connection = connection = new signalR.HubConnectionBuilder()
                                              .withUrl("/transactionHub")
                                              .configureLogging(signalR.LogLevel.Information)
@@ -88,8 +128,21 @@
             var detailsUrl = "/Debug/PurchaseOrderDetails?storeid=" + storeid + "&purchaseOrderId=" + orderid;
 
             $.getJSON(detailsUrl, function(d){
-                createConfirmScreen(d.amount, d.currency, d.salesPerson, d.storeId, d.orderId);
+                createConfirmScreen(d.amount, d.currency, d.salesPerson, d.storeId, d.purchaseOrderId);
             });
+        });
+        
+        connection.on("PurchaseOrderAccepted", function (groupName, orderId, amount, currency) {
+            
+            $("#purchase_confirmed").fadeIn();
+            $("#confirm_purchase").fadeOut();
+            Toastify({
+                    text: "Accepted: " + amount + " " + currency,
+                    duration: 3000,
+                    gravity: "bottom",
+                    positionLeft: false,
+                    close: true,
+                    }).showToast();
         });
         
         connection.start().then(function() {
