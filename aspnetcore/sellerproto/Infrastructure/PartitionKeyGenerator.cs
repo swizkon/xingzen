@@ -11,5 +11,9 @@ namespace Infra
         {
             return owner.FindFirst(ClaimTypes.NameIdentifier).Value;
         }
+
+
+
     }
+
 }

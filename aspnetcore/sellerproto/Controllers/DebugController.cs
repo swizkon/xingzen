@@ -57,8 +57,6 @@ namespace sellerproto.Controllers
 
         public IActionResult ScannerDemo(string id)
         {
-            // var model = await _purchaseOrderRepository.All(id);
-            // return View(model: model.ToList());
             return View(model: id);
         }
 
@@ -70,12 +68,15 @@ namespace sellerproto.Controllers
 
         public async Task<IActionResult> PurchaseOrderDetails(string storeId, string purchaseOrderId)
         {
-            var orders = await _purchaseOrderRepository.All(storeId);
+            // var orders = await _purchaseOrderRepository.All(storeId);
+
+            // https://www.gravatar.com/avatar/' + o.userKey + '?d=mm&s=200
 
             var order = await _purchaseOrderRepository.Find(storeId, purchaseOrderId);
             _logger.LogInformation(order?.PurchaseOrderId);
-            var model = order ?? orders.FirstOrDefault(x => x.PurchaseOrderId == purchaseOrderId);
-            return View(model: model);
+            var model = order; // ?? orders.FirstOrDefault(x => x.PurchaseOrderId == purchaseOrderId);
+            // return View(model: model);
+            return Json( model);
         }
     }
 }

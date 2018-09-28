@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = Model.Name + " register";
+
+    var salesPerson = ViewData["SalesPerson"]?.ToString();
 }
 
 <h3>@Model.Name <small>register</small></h3>
@@ -12,7 +14,7 @@
     <input type="tel" name="amount" id="amount" class="input input-lg" />
     <input type="hidden" name="currency" value="SEK" />
     <input type="hidden" name="storeId" value="@Model.Id" />
-    <input type="hidden" name="salesPerson" value="Sales person" />
+    <input type="hidden" name="salesPerson" value="@salesPerson" />
     <input type="submit"  class="input input-lg"/>
 </form>
 

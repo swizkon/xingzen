@@ -1,21 +1,50 @@
 ﻿@model XingZen.Domain.Model.Store
 
 @{
-    ViewData["Title"] = Model.Name + " customer display";
+    ViewData["Title"] = Model.Name + " display demo";
 }
 
-<h3>@Model.Name <small>customer display</small></h3>
+<h4>@Model.Name <small>display demo</small></h4>
 
-<div id="orders"></div>
+<div id="orders">
+    <div>
+        <h1><span id="amount"></span> <small id="currency"></small></h1>
+    </div>
+
+    <span class="pull-right">
+        <img id="avatar" src="about:blank" class="img-circle" />
+    </span>
+    
+    <span class="pull-left">
+        <img id="qr" src="/transactions/qrcode?data=amount%3D25%26currency%3DSEK%26order%3D1" />
+    </span>
+</div>
 
 
 @section scripts {
     <script>
 
+    function resetOrderScreen(amount, currency, salesPerson, storeID, orderId) {
+
+    }
+
+    function createOrderScreen(amount, currency, salesPerson, storeId, orderId) {
+        $('#amount').text(amount);
+        $('#currency').text(currency);
+        $('#avatar').attr('src', 'https://www.gravatar.com/avatar/' + salesPerson + '?d=mm&s=150');
+        
+        var qrdata = "amount=" + amount + "&currency=" + currency + "&store=" + storeId + "&order=" + orderId;
+        $('#qr').attr('src', '/transactions/qrcode?data=' + encodeURIComponent(qrdata));
+        $("#orders").fadeIn();
+    }
+
     var store = '@Model.Id';
     var connection;
 
     $(document).ready(function(){
+
+        createOrderScreen(25, "SEK", "205e460b479e2e5b48aec07710c08d50", 1, 1);
+        // $("#orders").fadeOut();
         
         connection = connection = new signalR.HubConnectionBuilder()
                                                 .withUrl("/transactionHub")
@@ -35,42 +64,19 @@
         });
             
         connection.on("PurchaseOrderRegistered", function (groupName, orderId, amount, currency) {
-            console.log("PurchaseOrderRegistered: " + groupName + ' ' + orderId + ' ' + amount + ' ' + currency);
-            
-            var tx = "amount=" + amount + "&currency=" + currency + "&order=" + orderId;
-            var qr_src = "/transactions/qrcode?data=" + encodeURIComponent(tx);
-            // document.querySelector('img#qr').src = qr_src;
+            $("#orders").fadeOut();
+            var detailsUrl = "/Debug/PurchaseOrderDetails?storeid=" + groupName + "&purchaseOrderId=" + orderId;
 
-            var order = document.createElement("DIV");
-            order.setAttribute("id", "order-info-" + orderId)
-            order.innerHTML = "<h2><small>Amount:</small> " + amount + " " + currency + "</h2>";
-            var img = document.createElement("IMG");
-            img.src = qr_src;
-            order.appendChild(img);
-
-            document.querySelector('#orders').appendChild(order);
-
-            /*
-            Toastify({
-                    text: "New: " + amount + " " + currency,
-                    duration: 3000,
-                    gravity: "bottom",
-                    positionLeft: false,
-                    close: true,
-                    }).showToast();
-            */
-            /*
-            setTimeout(function(){
-                connection.send('AcceptPurchaseOrder', 'Store' + store, orderId, amount, currency);
-            }, 2000);
-            */
+            $.getJSON(detailsUrl, function(d){
+                console.log(d);
+                createOrderScreen(d.amount,  d.currency, d.salesPerson, d.storeId, d.orderId);
+            });
         });
         
         connection.on("PurchaseOrderAccepted", function (groupName, orderId, amount, currency) {
-
-            $("#order-info-" + orderId).fadeOut();
+            $("#orders").fadeOut();
             Toastify({
-                    text: "Accepted: " + orderId,
+                    text: "PurchaseOrderAccepted: " + orderId,
                     duration: 3000,
                     gravity: "bottom",
                     positionLeft: false,

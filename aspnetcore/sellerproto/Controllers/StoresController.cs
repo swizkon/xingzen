@@ -56,6 +56,10 @@ namespace sellerproto.Controllers
         {
             ViewData["mode"] = Request.Query["mode"].FirstOrDefault();
 
+            var email = User.Claims.FirstOrDefault(c => c.Type == "emails")?.Value ?? "user@example.com";
+           
+            ViewData["SalesPerson"] = Infra.HashingUtil.CalculateMD5Hash( email.ToLower());
+
             var store = _storeService.StoresByUser(owner: User).FirstOrDefault(x => x.Id == id);
             
             if(store == null)

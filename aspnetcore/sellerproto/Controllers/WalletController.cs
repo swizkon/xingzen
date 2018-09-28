@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using sellerproto.Models;
 using XingZen.Domain.Model;
@@ -16,7 +17,6 @@ namespace sellerproto.Controllers
     [Authorize]
     public class WalletController : Controller
     {
-
         private readonly IRepository<Deposit> _depositRepository;
 
         private readonly IStoreService _storeService;
@@ -30,7 +30,7 @@ namespace sellerproto.Controllers
             _logger = logger;
         }
 
-        public override void OnActionExecuting(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext context)
+        public override void OnActionExecuting(ActionExecutingContext context)
         {
             base.OnActionExecuting(context);
             ViewData["mode"] = "embedded";
@@ -48,11 +48,8 @@ namespace sellerproto.Controllers
                    Currency = g.Key,
                    Balance = g.Sum(x => x.Amount).ToString("N2")
                }
-            );
-
-
-            // var newBAlance = deposits.Select(x => x.Amount).Sum();
-
+            ).Where(b => b.Balance != "0,00");
+            
             var claims = User.Claims?.Select(c => c.Type + ": " + c.Value).ToArray();
             var userClaims = User.Identity.Name + ": " + string.Join(" | ", claims);
 
