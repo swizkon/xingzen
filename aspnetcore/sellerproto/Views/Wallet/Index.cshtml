@@ -1,18 +1,16 @@
-﻿@model IList<XingZen.Domain.Model.Store>
+﻿@model IList<sellerproto.ViewModels.WalletBalance>
 @{
     ViewData["Title"] = "Wallet";
 }
 
-<h1>@ViewData["Title"]</h1>
+<h3>@ViewData["Title"]</h3>
 
-@foreach (var store in Model) {
+@foreach (var walletBalance in Model) {
     <div>
         <h3>
-            @store.Name 
-            <small>@store.Id</small>
+            @walletBalance.Balance 
+            <small>@walletBalance.Currency</small>
         </h3>
-            <a asp-action="Display" asp-route-id="@store.Id">Display</a>
-            <a asp-action="CashRegister" asp-route-id="@store.Id">CashRegister</a>
     </div>
 } 
 
@@ -29,3 +27,55 @@
 <div>    
 UserClaims: @ViewData["UserClaims"]
 </div>
+
+<div id="orders"></div>
+
+@section scripts {
+    <script>
+        function outputUpdate(vol) {
+            document.querySelector('#volume').value = vol;
+        }
+
+    var walletId = 'DefaultWallet';
+    var connection;
+    
+    $(document).ready(function(){
+        connection = connection = new signalR.HubConnectionBuilder()
+                                             .withUrl("/transactionHub")
+                                             .configureLogging(signalR.LogLevel.Information)
+                                             .build();
+
+        connection.on("WalletDepositRegistered", function (walletId, depositId, amount, currency) {
+            Toastify({
+                    text: "WalletDepositRegistered: " + amount + " " + currency,
+                    duration: 10000,
+                    gravity: "top",
+                    positionLeft: false,
+                    close: true,
+                    }).showToast();
+        });
+        /*
+        connection.on("WalletDepositConfirmed", function (walletId, depositId, amount, currency) {
+            
+            Toastify({
+                    text: "Confirmed: " + amount + " " + currency,
+                    duration: 3000,
+                    gravity: "bottom",
+                    positionLeft: false,
+                    close: true,
+                    }).showToast();
+        });
+        */
+            
+        connection.start().then(function() {
+            connection.send('Subscribe', 'Wallet' + walletId);
+        });
+
+        $('#deposit').on('submit', function(e){
+            sendDepositTask(e.target);
+            e.target.reset();
+            return false;
+        })
+    });
+    </script>
+}

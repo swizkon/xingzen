@@ -37,14 +37,14 @@ namespace Hubs
             return Clients.Group(groupName).SendAsync("PurchaseOrderRegistered", groupName, orderId, amount, currency);
         }
 
+        public Task InitiatePurchaseCheckout(string groupName, string storeId, string orderId)
+        {
+            return Clients.Group(groupName).SendAsync("PurchaseCheckoutInitiated", groupName, storeId, orderId);
+        }
+
         public Task AcceptPurchaseOrder(string groupName, string orderId, decimal amount, string currency)
         {
             return Clients.Group(groupName).SendAsync("PurchaseOrderAccepted", groupName, orderId, amount, currency);
-        }
-
-        public Task InitiatePurchaseCheckout(string groupName, string orderId)
-        {
-            return Clients.Group(groupName).SendAsync("PurchaseCheckoutInitiated", groupName, orderId);
         }
 
         public void Subscribe(string groupName)

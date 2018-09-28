@@ -84,7 +84,7 @@ namespace sellerproto.Controllers
 
             await _transactionHub.Clients
                             .Group("Wallet" + deposit.WalletId)
-                            .SendCoreAsync("WalletDepositRegistered", new object[] { deposit.WalletId, deposit.DepositId, newBAlance, deposit.Currency });
+                            .SendCoreAsync("WalletDepositConfirmed", new object[] { deposit.WalletId, deposit.DepositId, newBAlance, deposit.Currency });
 
             return new OkObjectResult(deposit);
         }
