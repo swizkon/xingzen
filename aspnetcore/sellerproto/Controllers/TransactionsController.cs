@@ -64,18 +64,18 @@ namespace sellerproto.Controllers
 
 
         [HttpPost]
-        public IActionResult AcceptPurchase([FromBody] AcceptPurchaseTask purchaseOrder)
+        public async Task<IActionResult> AcceptPurchase([FromBody] AcceptPurchaseTask purchaseOrder)
         {
-            /*
-            var order = new PurchaseOrder(purchaseOrderId: _generator.Next().ToString(),
-                                            storeId: purchaseOrder.StoreId,
-                                            salesPerson: purchaseOrder.SalesPerson,
-                                            amount: purchaseOrder.Amount,
-                                          currency: purchaseOrder.Currency);
-            */
-            // purchaseOrderRepository.Add(purchaseOrder.StoreId, order);
+            // TODO Fix correct domain for this transaction
+            var deposit = new Deposit(
+                    depositId: _generator.Next().ToString(),
+                    walletId: purchaseOrder.WalletId,
+                    amount: -(decimal)purchaseOrder.Amount,
+                    currency: purchaseOrder.Currency);
 
-            _transactionHub.Clients
+            await _depositRepository.Add(deposit.WalletId, deposit);
+
+            await _transactionHub.Clients
                             .Group("Store" + purchaseOrder.StoreId)
                             .SendCoreAsync("PurchaseOrderAccepted",
                                         new object[] { purchaseOrder.StoreId,
@@ -85,7 +85,7 @@ namespace sellerproto.Controllers
                                                      purchaseOrder.Currency,
                                                      purchaseOrder.Buyer });
 
-            _transactionHub.Clients
+            await _transactionHub.Clients
                             .Group("Wallet" + purchaseOrder.WalletId)
                             .SendCoreAsync("PurchaseOrderAccepted",
                                         new object[] { purchaseOrder.StoreId,
