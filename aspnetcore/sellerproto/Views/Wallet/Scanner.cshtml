@@ -92,15 +92,20 @@
         
         var qrdata = "amount=" + amount + "&currency=" + currency + "&store=" + storeId + "&order=" + orderId;
         $('#qr').attr('src', '/transactions/qrcode?data=' + encodeURIComponent(qrdata));
-        $("#confirm_purchase").fadeIn();
-        $("#waiting").fadeOut();
+
+        transitionView("#waiting", "#confirm_purchase");
     }
     
     function resetScanner()
     {
-        $("#confirm_purchase").fadeOut();
-        $("#purchase_confirmed").fadeOut();
-        $("#waiting").fadeIn();
+        $("#confirm_purchase").hide();
+        transitionView("#purchase_confirmed", "#waiting");
+    }
+
+    function transitionView(from, to) {
+        $(from).fadeOut(function(){
+            $(to).fadeIn();
+        });
     }
         
     var walletId = '@walletId';
@@ -134,15 +139,7 @@
         
         connection.on("PurchaseOrderAccepted", function (groupName, orderId, amount, currency) {
             
-            $("#purchase_confirmed").fadeIn();
-            $("#confirm_purchase").fadeOut();
-            Toastify({
-                    text: "Accepted: " + amount + " " + currency,
-                    duration: 3000,
-                    gravity: "bottom",
-                    positionLeft: false,
-                    close: true,
-                    }).showToast();
+            transitionView("#confirm_purchase", "#purchase_confirmed");
         });
         
         connection.start().then(function() {

@@ -37,7 +37,7 @@ namespace sellerproto.Controllers
         }
 
         [Authorize, HttpGet]
-        public async Task<IActionResult> Index(string walletId = "DefaultWallet")
+        public async Task<IActionResult> Index(string walletId = "DefaultWallet", bool onlyContent = false)
         {
             var deposits = await _depositRepository.All(walletId);
 
@@ -55,7 +55,10 @@ namespace sellerproto.Controllers
 
             ViewData["UserClaims"] = userClaims;
 
-            return View(model: balances.ToList());
+            if(onlyContent)
+                return PartialView(model: balances.ToList());
+            else
+                return View(model: balances.ToList());
         }
 
         [HttpGet]

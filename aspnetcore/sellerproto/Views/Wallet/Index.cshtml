@@ -19,12 +19,11 @@
 UserClaims: @ViewData["UserClaims"]
 </div>
 
-<div id="orders"></div>
 
 @section scripts {
     <script>
-        function outputUpdate(vol) {
-            document.querySelector('#volume').value = vol;
+        function reloadWallet() {
+            $(".body-content").load("/wallet?onlyContent=true");
         }
 
     var walletId = 'DefaultWallet';
@@ -44,20 +43,20 @@ UserClaims: @ViewData["UserClaims"]
                     positionLeft: false,
                     close: true,
                     }).showToast();
+            reloadWallet();
         });
-        /*
-        connection.on("WalletDepositConfirmed", function (walletId, depositId, amount, currency) {
-            
+        
+        connection.on("PurchaseOrderAccepted", function (groupName, orderId, amount, currency) {
             Toastify({
-                    text: "Confirmed: " + amount + " " + currency,
+                    text: "Accepted: " + amount + " " + currency,
                     duration: 3000,
                     gravity: "bottom",
                     positionLeft: false,
                     close: true,
                     }).showToast();
+            reloadWallet();
         });
-        */
-            
+        
         connection.start().then(function() {
             connection.send('Subscribe', 'Wallet' + walletId);
         });
