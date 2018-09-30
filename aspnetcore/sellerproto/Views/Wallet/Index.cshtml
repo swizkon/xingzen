@@ -22,14 +22,20 @@ UserClaims: @ViewData["UserClaims"]
 
 @section scripts {
     <script>
-        function reloadWallet() {
-            $(".body-content").load("/wallet?onlyContent=true");
-        }
+        
+    var walletChange$ = new Rx.Subject();
+
+
+    var reloader = walletChange$.subscribe(function() {
+        $(".body-content").load("/wallet?onlyContent=true");
+    });
+    var debugSub = walletChange$.subscribe(console.log);
 
     var walletId = 'DefaultWallet';
     var connection;
     
     $(document).ready(function(){
+
         connection = connection = new signalR.HubConnectionBuilder()
                                              .withUrl("/transactionHub")
                                              .configureLogging(signalR.LogLevel.Information)
@@ -43,10 +49,11 @@ UserClaims: @ViewData["UserClaims"]
                     positionLeft: false,
                     close: true,
                     }).showToast();
-            reloadWallet();
+                    
+            walletChange$.next({amount: amount, currency: currency});
         });
         
-        connection.on("PurchaseOrderAccepted", function (groupName, orderId, amount, currency) {
+        connection.on("PurchaseOrderAccepted", function (storeID, purchaseOrderId, walletId, amount, currency) {
             Toastify({
                     text: "Accepted: " + amount + " " + currency,
                     duration: 3000,
@@ -54,7 +61,9 @@ UserClaims: @ViewData["UserClaims"]
                     positionLeft: false,
                     close: true,
                     }).showToast();
-            reloadWallet();
+            var price = 0 - parseFloat(amount);
+            
+            walletChange$.next({amount: -parseFloat(amount), currency: currency});
         });
         
         connection.start().then(function() {
