@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using sellerproto.Models;
+using Swizkon.Infrastructure.Utils;
 using XingZen.Domain.Model;
 using XingZen.Domain.Repositories.Interfaces;
 using XingZen.Domain.Services;
@@ -78,7 +79,7 @@ namespace sellerproto.Controllers
         {
             var email = User.Claims.FirstOrDefault(c => c.Type == "emails")?.Value ?? "user@example.com";
            
-            ViewData["Buyer"] = Infra.HashingUtil.CalculateMD5Hash( email.ToLower());
+            ViewData["Buyer"] = HashingUtil.CalculateMD5Hash( email.ToLower());
 
             return View(model: id);
         }

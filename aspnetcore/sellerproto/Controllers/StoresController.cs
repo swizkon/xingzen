@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using sellerproto.Tasks;
+using Swizkon.Infrastructure.Utils;
 using XingZen.Domain.Services;
 
 namespace sellerproto.Controllers
@@ -58,7 +59,7 @@ namespace sellerproto.Controllers
 
             var email = User.Claims.FirstOrDefault(c => c.Type == "emails")?.Value ?? "user@example.com";
            
-            ViewData["SalesPerson"] = Infra.HashingUtil.CalculateMD5Hash( email.ToLower());
+            ViewData["SalesPerson"] = HashingUtil.CalculateMD5Hash( email.ToLower());
 
             var store = _storeService.StoresByUser(owner: User).FirstOrDefault(x => x.Id == id);
             
