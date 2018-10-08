@@ -54,6 +54,8 @@ namespace XingZen.Configuration
 
                         o.ClientId = openIdConnectSettings.ClientId;
                         o.ClientSecret = openIdConnectSettings.ClientSecret;
+
+                        o.TokenValidationParameters.ValidateIssuer = false;
                         
                         o.Events.OnRedirectToIdentityProvider = context =>
                         {
