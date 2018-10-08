@@ -10,7 +10,7 @@ using Hubs;
 using sellerproto.Tasks;
 using XingZen.Domain.Repositories.Interfaces;
 using XingZen.Domain.Model;
-using XingZen.Infrastructure.Services.Generators.Interfaces;
+using Swizkon.Infrastructure.Generators.Interfaces;
 
 namespace sellerproto.Controllers
 {

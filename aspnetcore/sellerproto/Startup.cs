@@ -18,8 +18,10 @@ using XingZen.Domain.Repositories;
 using XingZen.Domain.Repositories.Interfaces;
 using XingZen.Domain.Services;
 using XingZen.Domain.Model;
-using XingZen.Infrastructure.Services.Generators.Interfaces;
-using XingZen.Infrastructure.Services.Generators;
+using Swizkon.Infrastructure.Generators.Interfaces;
+using Swizkon.Infrastructure.Generators;
+using Microsoft.AspNetCore.Http;
+using XingZen.Configuration;
 
 namespace sellerproto
 {
@@ -92,13 +94,7 @@ namespace sellerproto
         {
             Console.WriteLine("ConfigureServices(IServiceCollection services)");
 
-            services.AddAuthentication(sharedOptions =>
-            {
-                sharedOptions.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                sharedOptions.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
-            })
-            .AddAzureAdB2C(options => Configuration.Bind("Authentication:AzureAdB2C", options))
-            .AddCookie();
+            services.AddOpenIdConnect(Configuration);
 
             services.AddMvc();
             services.AddSignalR();

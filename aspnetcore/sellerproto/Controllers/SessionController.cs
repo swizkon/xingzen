@@ -33,29 +33,13 @@ namespace sellerproto.Controllers
         }
 
         [HttpGet]
-        public IActionResult ResetPassword()
+        public  async Task<IActionResult> SignOut()
         {
-            var redirectUrl = Url.Action(nameof(HomeController.Index), "Home");
-            var properties = new AuthenticationProperties { RedirectUri = redirectUrl };
-            properties.Items[AzureAdB2COptions.PolicyAuthenticationProperty] = AzureAdB2COptions.ResetPasswordPolicyId;
-            return Challenge(properties, OpenIdConnectDefaults.AuthenticationScheme);
-        }
 
-        [HttpGet]
-        public IActionResult EditProfile()
-        {
-            var redirectUrl = Url.Action(nameof(HomeController.Index), "Home");
-            var properties = new AuthenticationProperties { RedirectUri = redirectUrl };
-            properties.Items[AzureAdB2COptions.PolicyAuthenticationProperty] = AzureAdB2COptions.EditProfilePolicyId;
-            return Challenge(properties, OpenIdConnectDefaults.AuthenticationScheme);
-        }
 
-        [HttpGet]
-        public IActionResult SignOut()
-        {
-            var callbackUrl = Url.Action(nameof(SignedOut), "Session", values: null, protocol: Request.Scheme);
-            return SignOut(new AuthenticationProperties { RedirectUri = callbackUrl },
-                CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
+            await HttpContext.SignOutAsync();
+
+            return Redirect("/Session/SignedOut");
         }
 
         [HttpGet]

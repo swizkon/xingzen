@@ -7,9 +7,9 @@ namespace XingZen.Domain.Services
     using Microsoft.Extensions.Configuration;
     using Microsoft.WindowsAzure.Storage;
     using Microsoft.WindowsAzure.Storage.Table;
+    using Swizkon.Infrastructure.Generators.Interfaces;
     using XingZen.Domain.Model;
     using XingZen.Domain.Repositories.Interfaces;
-    using XingZen.Infrastructure.Services.Generators.Interfaces;
 
     public class StoreService : IStoreService
     {
