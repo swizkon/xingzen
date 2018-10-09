@@ -8,7 +8,7 @@ body.embedded {
     padding-bottom: 0px;
 }
 
-body.embedded nav {
+body.embedded nav.navbar-fixed-top {
     display: none;
 }
 

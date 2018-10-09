@@ -4,22 +4,34 @@
     ViewData["Title"] = Model.Name + " display demo";
 }
 
-<h4>@Model.Name <small>display demo</small></h4>
 
 <div id="orders">
-    <span class="pull-left">
-        <img id="qr" src="about:blank" style="width:100%;" />
-    </span>
-    
-    <span class="pull-right">
-        <img id="avatar" src="about:blank" class="img-circle" />
-        <h1><span id="amount"></span> <small id="currency"></small></h1>
-    </span>
+
+        <div class="row">
+            <div class="col col-xs-6 col-md-6">
+                <img id="qr" src="about:blank" style="width:100%;" />
+            </div>
+            <div class="col col-xs-4 col-md-4">
+                <img id="avatar" src="about:blank" style="width:100%;margin-top:15%;" class="img-circle" />
+                
+                <h1 style="text-align:center;font-size: 500%;"><span id="amount"></span> <small id="currency"></small></h1>
+            </div>
+        </div>
 </div>
+<!-- 
+<video id="cam" autoplay playsinline style="border:solid 1px blue;width:400px;height:400px;"></video> -->
 
-<video id="cam" style="border:solid 1px blue;width:400px;height:400px;"></video>
 
-
+    <nav class="navbar navbar-inverse navbar-fixed-bottom">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand">@Model.Name <small>display demo</small></a>
+            </div>
+            <div class="navbar-collapse collapse">
+            </div>
+        </div>
+    </nav>
+    
 @section scripts {
     <script>
 
@@ -31,7 +43,7 @@
     function createOrderScreen(amount, currency, salesPerson, storeId, orderId) {
         $('#amount').text(amount);
         $('#currency').text(currency);
-        $('#avatar').attr('src', 'https://www.gravatar.com/avatar/' + salesPerson + '?d=mm&s=150');
+        $('#avatar').attr('src', 'https://www.gravatar.com/avatar/' + salesPerson + '?d=mm&s=350');
         
         var qrdata = "amount=" + amount + "&currency=" + currency + "&store=" + storeId + "&order=" + orderId;
         $('#qr').attr('src', '/transactions/qrcode?data=' + encodeURIComponent(qrdata));
@@ -44,13 +56,12 @@
     $(document).ready(function(){
 
         
-        var videostuff = navigator.mediaDevices.getUserMedia({video:{ facingMode: 'user'}});
-        videostuff.then(function(stream){
-            var o = $('#cam')[0];
-            console.log(o);
-            o.srcObject = stream;
-            o.src = stream;
-        });
+        // var videostuff = navigator.mediaDevices.getUserMedia({video:{ facingMode: 'user'}});
+        // videostuff.then(function(stream){
+        //     var o = $('#cam')[0];
+        //     console.log(o);
+        //     o.srcObject = stream;
+        // });
 
         createOrderScreen(25, "SEK", "205e460b479e2e5b48aec07710c08d50", 1, 1);
         // $("#orders").fadeOut();
