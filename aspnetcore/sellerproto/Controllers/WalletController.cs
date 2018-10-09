@@ -77,7 +77,7 @@ namespace sellerproto.Controllers
         [HttpGet]
         public IActionResult Scanner(string id)
         {
-            var email = User.Claims.FirstOrDefault(c => c.Type == "emails")?.Value ?? "user@example.com";
+            var email = XingZen.Domain.Services.IdentityService.Email(User);
            
             ViewData["Buyer"] = HashingUtil.CalculateMD5Hash( email.ToLower());
 

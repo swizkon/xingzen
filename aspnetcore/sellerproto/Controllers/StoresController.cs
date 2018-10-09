@@ -57,7 +57,7 @@ namespace sellerproto.Controllers
         {
             ViewData["mode"] = Request.Query["mode"].FirstOrDefault();
 
-            var email = User.Claims.FirstOrDefault(c => c.Type == "emails")?.Value ?? "user@example.com";
+            var email = XingZen.Domain.Services.IdentityService.Email(User);
            
             ViewData["SalesPerson"] = HashingUtil.CalculateMD5Hash( email.ToLower());
 

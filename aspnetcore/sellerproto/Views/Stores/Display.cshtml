@@ -17,9 +17,12 @@
     </span>
 </div>
 
+<video id="cam" style="border:solid 1px blue;width:400px;height:400px;"></video>
+
 
 @section scripts {
     <script>
+
 
     function resetOrderScreen(amount, currency, salesPerson, storeID, orderId) {
 
@@ -39,6 +42,15 @@
     var connection;
 
     $(document).ready(function(){
+
+        
+        var videostuff = navigator.mediaDevices.getUserMedia({video:{ facingMode: 'user'}});
+        videostuff.then(function(stream){
+            var o = $('#cam')[0];
+            console.log(o);
+            o.srcObject = stream;
+            o.src = stream;
+        });
 
         createOrderScreen(25, "SEK", "205e460b479e2e5b48aec07710c08d50", 1, 1);
         // $("#orders").fadeOut();
