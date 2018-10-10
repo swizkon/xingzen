@@ -7,15 +7,16 @@
     var buyer = ViewData["Buyer"]?.ToString();
 }
 
-<h4>Scanner <small>@ViewData["Title"] demo</small></h4>
-
-
 <div id="waiting">
     <div class="row">
         <div class="col-xs-8 col-xs-offset-2">
             <h3>Scanna en kod</h3>
             <div class="well">
+                <video id="scancam" autoplay playsinline style="border:solid 1px blue;width:100%;"></video>
+                <hr/>
                 Registrera köp i kassan...
+                <hr/>
+                <div id="orders"></div>
             </div>
         </div>
     </div>
@@ -74,6 +75,12 @@
 </div>
 
 
+@section footer
+{
+    @await Html.PartialAsync("_WalletFooter")
+}
+
+
 @section scripts {
     <script>
         
@@ -108,10 +115,18 @@
         });
     }
         
+    var store = '8571';
     var walletId = '@walletId';
     var connection;
     
     $(document).ready(function(){
+
+        var videostuff = navigator.mediaDevices.getUserMedia({video:{ facingMode: 'environment'}});
+        videostuff.then(function(stream){
+            var o = $('#scancam')[0];
+            console.log(o);
+            o.srcObject = stream;
+        });
         
         $("#waiting").hide();
         $("#confirm_purchase").hide();
@@ -128,7 +143,6 @@
                                              .build();
                                              
         connection.on("PurchaseCheckoutInitiated", function (walletId, storeid, orderid) {
-
             $("#waiting").fadeOut();
             var detailsUrl = "/Debug/PurchaseOrderDetails?storeid=" + storeid + "&purchaseOrderId=" + orderid;
 
@@ -136,13 +150,42 @@
                 createConfirmScreen(d.amount, d.currency, d.salesPerson, d.storeId, d.purchaseOrderId);
             });
         });
+
+
+
+        connection.on("PurchaseOrderRegistered", function (groupName, orderId, amount, currency) {
+            var tx = "amount=" + amount + "&currency=" + currency + "&order=" + orderId;
+            
+            var order = document.createElement("BUTTON");
+            order.setAttribute("id", "order-info-" + orderId)
+            order.setAttribute("data-orderid", orderId)
+            order.setAttribute("data-storeid", groupName)
+            order.innerHTML = "Scan " + amount + " " + currency;
+            
+            document.querySelector('#orders').appendChild(order);
+            
+            $("#order-info-" + orderId).click(function(e){
+                
+                var orderid = $(e.target).data('orderid');
+                var storeid = $(e.target).data('storeid');
+
+                connection.send('InitiatePurchaseCheckout', 'Store' + storeid, storeid, orderid);
+                connection.send('InitiatePurchaseCheckout', 'Wallet' + walletId, storeid, orderid);
+            });
+        });
+        
+
+
+
         
         connection.on("PurchaseOrderAccepted", function (groupName, orderId, amount, currency) {
             
+            $("#order-info-" + orderId).fadeOut();
             transitionView("#confirm_purchase", "#purchase_confirmed");
         });
         
         connection.start().then(function() {
+            connection.send('Subscribe', 'Store' + store);
             connection.send('Subscribe', 'Wallet' + walletId);
         });
 

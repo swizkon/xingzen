@@ -1,19 +1,38 @@
 ﻿@model IList<sellerproto.ViewModels.WalletBalance>
 @{
-    ViewData["Title"] = "Balance";
+    ViewData["Title"] = "Aktuellt saldo";
 }
 
-<h4>@ViewData["Title"] <small>DefaultWallet demo</small></h4>
 
-@foreach (var walletBalance in Model) {
-    <div>
-        <h3>
-            @walletBalance.Balance 
-            <small>@walletBalance.Currency</small>
-        </h3>
+    <div class="row">
+        <div class="col-xs-8 col-xs-offset-2">
+            <h3>@ViewData["Title"]</h3>
+            <div class="well">
+            @foreach (var walletBalance in Model) {
+                <div>
+                    <h3>
+                        @walletBalance.Balance 
+                        <small>@walletBalance.Currency</small>
+                    </h3>
+                </div>
+            }
+            </div>
+        </div>
     </div>
-} 
+    
+<hr />
+    <div class="row">
+        <div class="col-xs-8 col-xs-offset-2">
+            <p>
+                <a asp-area="" asp-controller="Wallet" asp-action="Deposit">Gör en insättning (demo)</a>
+            </p>
+        </div>
+    </div>
 
+@section footer
+{
+    @await Html.PartialAsync("_WalletFooter")
+}
 
 <!-- div>
 UserClaims: @ViewData["UserClaims"]

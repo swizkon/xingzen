@@ -115,11 +115,12 @@ namespace sellerproto.Controllers
 
             var deposits = await _depositRepository.All(deposit.WalletId);
 
-            var newBAlance = deposits.Select(x => x.Amount).Sum();
+            var newBalance = deposits.Where(x =>x.Currency == deposit.Currency)
+                                     .Select(x => x.Amount).Sum();
 
             await _transactionHub.Clients
                             .Group("Wallet" + deposit.WalletId)
-                            .SendCoreAsync("WalletDepositConfirmed", new object[] { deposit.WalletId, deposit.DepositId, newBAlance, deposit.Currency });
+                            .SendCoreAsync("WalletDepositConfirmed", new object[] { deposit.WalletId, deposit.DepositId, newBalance, deposit.Currency });
 
             return new OkObjectResult(deposit);
         }

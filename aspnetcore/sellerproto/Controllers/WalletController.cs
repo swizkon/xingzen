@@ -74,6 +74,14 @@ namespace sellerproto.Controllers
             return View(model: store);
         }
 
+
+        [HttpGet]
+        public IActionResult Deposit(string id = "DefaultWallet")
+        {
+            ViewData["WalletId"] = id;
+            return View(model: id);
+        }
+
         [HttpGet]
         public IActionResult Scanner(string id)
         {

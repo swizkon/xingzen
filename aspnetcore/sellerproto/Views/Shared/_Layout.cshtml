@@ -54,6 +54,9 @@ var bodyClass = ViewData["mode"]?.ToString();
         </footer -->
     </div>
 
+    
+    @RenderSection("footer", required: false)
+
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>

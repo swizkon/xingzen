@@ -1,0 +1,127 @@
+﻿@model String
+@{
+    ViewData["Title"] = "Gör en insättning";
+
+    var walletId = ViewData["WalletId"] ??  "DefaultWallet";
+}
+
+<form id="deposit" onsubmit="this.reset">
+
+
+    <div class="row">
+        <div class="col-xs-8 col-xs-offset-2">
+            <h3>@ViewData["Title"]</h3>
+
+            <div class="alert alert-warning alert-dismissible">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                <strong>OBS!</strong> Detta är en demo av deposit.
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        
+        <div class="col col-xs-8 col-xs-offset-2">
+            <div class="input-group input-group-lg">
+                <div class="input-group-btn">
+                    <button id="currency-selector-btn" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="currency">SEK</span> <span class="caret"></span></button>
+                    <ul id="currency-selector" class="dropdown-menu">
+                    <li><a href="#SEK">SEK</a></li>
+                    <li><a href="#EUR">EUR</a></li>
+                    <li><a href="#NOK">NOK</a></li>
+                    <li><a href="#DKK">DKK</a></li>
+                    </ul>
+                </div>
+                <input  style="border:solid 1px blue;" class="form-control" type="range" id="amount" name="amount" min="-500" value="100" max="500" step="10" oninput="outputUpdate(value)" aria-label="Amount" />
+                <span class="input-group-addon"><output style="width:50px;" class="" for="amount" id="volume">100</output></span>
+            </div>
+        </div>
+        
+    </div>
+    <div class="row mt-5">
+        <div class="col col-xs-8 col-xs-offset-2 mt-5">
+            
+            <div class="input-group input-group-lg">
+                <input type="submit"  value="Deposit" class="form-control btn btn-primary btn-lg" />
+            </div>
+        </div>
+    </div>
+    
+    <input type="hidden" name="currency" id="currency" value="SEK" />
+    <input type="hidden" name="walletId" value="@walletId" />
+</form>
+
+<hr />
+    <div class="row">
+        <div class="col-xs-8 col-xs-offset-2">
+            <p>
+                <a asp-area="" asp-controller="Wallet" asp-action="Index">Ditt saldo</a>
+            </p>
+        </div>
+    </div>
+
+
+@section footer
+{
+    @await Html.PartialAsync("_WalletFooter")
+}
+
+@section scripts {
+    <script>
+        function outputUpdate(vol) {
+            document.querySelector('#volume').value = vol;
+        }
+
+    var walletId = '@walletId';
+    var connection;
+    
+    $(document).ready(function(){
+
+        $('#currency-selector a').click(function (e) {
+            e.preventDefault()
+            var currency = e.target.innerHTML;
+
+            $('#currency').val(currency);
+            $('#currency-selector-btn span.currency').text(currency);
+            // 
+        })
+
+        connection = connection = new signalR.HubConnectionBuilder()
+                                             .withUrl("/transactionHub")
+                                             .configureLogging(signalR.LogLevel.Information)
+                                             .build();
+
+        connection.on("WalletDepositRegistered", function (walletId, depositId, amount, currency) {
+            Toastify({
+                    text: "Insättning: " + amount + " " + currency,
+                    duration: 1000,
+                    gravity: "top",
+                    positionLeft: false,
+                    close: true,
+                    }).showToast();
+        });
+        
+        connection.on("WalletDepositConfirmed", function (walletId, depositId, amount, currency) {
+            
+            Toastify({
+                    text: "Nytt saldo: " + amount + " " + currency,
+                    duration: 3000,
+                    gravity: "top",
+                    positionLeft: false,
+                    close: true,
+                    }).showToast();
+        });
+            
+        connection.start().then(function() {
+            connection.send('Subscribe', 'Wallet' + walletId);
+        });
+
+        $('#deposit').on('submit', function(e){
+            sendDepositTask(e.target);
+            // e.target.reset();
+            return false;
+        })
+    });
+    </script>
+}
