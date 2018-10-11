@@ -44,7 +44,8 @@
         $('#currency').text(currency);
         $('#avatar').attr('src', 'https://www.gravatar.com/avatar/' + salesPerson + '?d=mm&s=350');
         
-        var qrdata = "amount=" + amount + "&currency=" + currency + "&store=" + storeId + "&order=" + orderId;
+        var qrdata = document.location.origin + "/wallet/scanner?s=" + storeId + "&o=" + orderId;
+        console.log(qrdata);
         $('#qr').attr('src', '/transactions/qrcode?data=' + encodeURIComponent(qrdata));
         $("#orders").fadeIn();
     }
@@ -54,16 +55,7 @@
 
     $(document).ready(function(){
 
-        
-        // var videostuff = navigator.mediaDevices.getUserMedia({video:{ facingMode: 'user'}});
-        // videostuff.then(function(stream){
-        //     var o = $('#cam')[0];
-        //     console.log(o);
-        //     o.srcObject = stream;
-        // });
-
         createOrderScreen(25, "SEK", "205e460b479e2e5b48aec07710c08d50", 1, 1);
-        // $("#orders").fadeOut();
         
         connection = connection = new signalR.HubConnectionBuilder()
                                                 .withUrl("/transactionHub")
@@ -88,7 +80,7 @@
 
             $.getJSON(detailsUrl, function(d){
                 console.log(d);
-                createOrderScreen(d.amount,  d.currency, d.salesPerson, d.storeId, d.orderId);
+                createOrderScreen(d.amount, d.currency, d.salesPerson, d.storeId, d.purchaseOrderId);
             });
         });
         

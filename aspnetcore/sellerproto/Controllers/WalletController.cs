@@ -83,11 +83,12 @@ namespace sellerproto.Controllers
         }
 
         [HttpGet]
-        public IActionResult Scanner(string id)
+        public IActionResult Scanner(string id, string s = "", string o = "")
         {
             var email = XingZen.Domain.Services.IdentityService.Email(User);
-           
-            ViewData["Buyer"] = HashingUtil.CalculateMD5Hash( email.ToLower());
+            ViewData["InitStoreId"] = s;
+            ViewData["InitOrderId"] = o;
+            ViewData["Buyer"] = HashingUtil.CalculateMD5Hash(email.ToLower());
 
             return View(model: id);
         }

@@ -4,6 +4,9 @@
 
     var walletId = ViewData["Title"];
     
+    var initStoreId = ViewData["InitStoreId"];
+    var initOrderId = ViewData["InitOrderId"];
+    
     var buyer = ViewData["Buyer"]?.ToString();
 }
 
@@ -12,8 +15,9 @@
         <div class="col-xs-8 col-xs-offset-2">
             <h3>Scanna en kod</h3>
             <div class="well">
-                <video id="scancam" autoplay playsinline style="border:solid 1px blue;width:100%;"></video>
+                <!-- video id="scancam" autoplay playsinline style="border:solid 1px blue;width:100%;"></video>
                 <hr/>
+                -->
                 Registrera köp i kassan...
                 <hr/>
                 <div id="orders"></div>
@@ -45,16 +49,16 @@
             <h3>Bekräfta&nbsp;köp</h3>
         </div>
     </div>
-
-    <div class="row">
-        <div class="col-xs-8 col-xs-offset-2">
-            <h1><span id="amount_label"></span> <small id="currency_label"></small></h1>
-        </div>
-    </div>
     
     <div class="row">
         <div class="col-centered col-xs-8 col-xs-offset-2 center">
             <img id="avatar" src="about:blank" class="img-circle" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-8 col-xs-offset-2">
+            <h1><span id="amount_label"></span> <small id="currency_label"></small></h1>
         </div>
     </div>
     
@@ -117,16 +121,11 @@
         
     var store = '8571';
     var walletId = '@walletId';
+    var initStoreId = '@initStoreId';
+    var initOrderId = '@initOrderId';
     var connection;
     
     $(document).ready(function(){
-
-        var videostuff = navigator.mediaDevices.getUserMedia({video:{ facingMode: 'environment'}});
-        videostuff.then(function(stream){
-            var o = $('#scancam')[0];
-            console.log(o);
-            o.srcObject = stream;
-        });
         
         $("#waiting").hide();
         $("#confirm_purchase").hide();
@@ -151,8 +150,6 @@
             });
         });
 
-
-
         connection.on("PurchaseOrderRegistered", function (groupName, orderId, amount, currency) {
             var tx = "amount=" + amount + "&currency=" + currency + "&order=" + orderId;
             
@@ -174,19 +171,19 @@
             });
         });
         
-
-
-
-        
         connection.on("PurchaseOrderAccepted", function (groupName, orderId, amount, currency) {
-            
             $("#order-info-" + orderId).fadeOut();
             transitionView("#confirm_purchase", "#purchase_confirmed");
         });
         
         connection.start().then(function() {
-            connection.send('Subscribe', 'Store' + store);
+            connection.send('Subscribe', 'Stores');
             connection.send('Subscribe', 'Wallet' + walletId);
+            // 
+            if (initOrderId != '' && initStoreId != '') {
+                connection.send('InitiatePurchaseCheckout', 'Store' + initStoreId, initStoreId, initOrderId);
+                connection.send('InitiatePurchaseCheckout', 'Wallet' + walletId, initStoreId, initOrderId);
+            }
         });
 
         $('#acceptorder').on('submit', function(e) {
