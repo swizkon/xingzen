@@ -74,11 +74,14 @@
                     }).showToast();
         });
         
-        connection.on("PurchaseOrderAccepted", function (groupName, orderId, amount, currency) {
-            
+        connection.on("PurchaseOrderAccepted", function (groupName, orderId, walletId, amount, currency, buyerId, buyerName) {
+
             Toastify({
-                    text: "Accepted: " + amount + " " + currency,
-                    duration: 3000,
+                    text: "Betalning mottagen:"
+                    + "<br/><h3>" + amount + " " + currency + "</h3>"
+                    + "<br /><img class='img-circle' src='https://www.gravatar.com/avatar/15c3b314b03e87b8ac7bae587ef3a16b?d=mm&s=150'/>"
+                    + "<br />" + buyerName,
+                    duration: 10000,
                     gravity: "bottom",
                     positionLeft: false,
                     close: true,

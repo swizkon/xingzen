@@ -4,18 +4,30 @@
     ViewData["Title"] = Model.Name + " display demo";
 }
 
-<div id="orders">
 
+
+<div id="orders">
+    <div class="row">
+        <div class="col-xs-7 col-xs-offset-1 center">
+            <h1 style="font-size: 450%;"><span id="amount"></span> <small id="currency"></small></h1>
+        </div>
+            <div class="col col-xs-4">
+                <img id="avatar" src="about:blank" style="width:100%;margin-top:15%;" class="img-circle" />
+            </div>
+    </div>
+
+    
         <div class="row">
-            <div class="col col-xs-6 col-md-6">
+            <div class="col col-xs-12 col-md-6 pull-left">
                 <img id="qr" src="about:blank" style="width:100%;" />
             </div>
-            <div class="col col-xs-4 col-md-4">
-                <img id="avatar" src="about:blank" style="width:100%;margin-top:15%;" class="img-circle" />
-                
-                <h1 style="text-align:center;font-size: 500%;"><span id="amount"></span> <small id="currency"></small></h1>
-            </div>
         </div>
+        
+    <div class="row">
+        <div class="col-xs-10 col-xs-offset-1">
+        </div>
+    </div>
+
 </div>
 <!-- 
 <video id="cam" autoplay playsinline style="border:solid 1px blue;width:400px;height:400px;"></video> -->
@@ -55,7 +67,7 @@
 
     $(document).ready(function(){
 
-        createOrderScreen(25, "SEK", "205e460b479e2e5b48aec07710c08d50", 1, 1);
+        createOrderScreen(100, "SEK", "205e460b479e2e5b48aec07710c08d50", 1, 1);
         
         connection = connection = new signalR.HubConnectionBuilder()
                                                 .withUrl("/transactionHub")

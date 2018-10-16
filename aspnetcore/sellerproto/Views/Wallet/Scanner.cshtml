@@ -13,10 +13,11 @@
 
 <div id="waiting">
     <div class="row">
-        <div class="col-xs-8 col-xs-offset-2">
-            <h3>Scanna en kod</h3>
+        <div class="col-xs-10 col-xs-offset-1">
+            <h1>Scanna en kod</h1>
             <div class="well">
-                Registrera köp i kassan...
+                Demon stödjer inte QR-scanner.
+                Väntar på att ett demo köp ska skapas.
                 <hr/>
                 <div id="orders"></div>
             </div>
@@ -28,10 +29,10 @@
 <div id="purchase_confirmed">
     
     <div class="row">
-        <div class="col-xs-8 col-xs-offset-2">
-            <h3>Köpet bekräftat</h3>
+        <div class="col-xs-10 col-xs-offset-1">
+            <h1>Köpet bekräftat</h1>
             <div class="well">
-                DU BETALADE X TILL Y
+                Du betalade 100 SEK till JONAS JERNDIN
             </div>
             <input type="button" id="reset_scanner" value="Scanna igen" class="input input-lg input-default"/>
         </div>
@@ -43,19 +44,19 @@
 <div id="confirm_purchase">
     
     <div class="row">
-        <div class="col-xs-8 col-xs-offset-2">
-            <h3>Bekräfta&nbsp;köp</h3>
+        <div class="col-xs-10 col-xs-offset-1">
+            <h1>Bekräfta&nbsp;köp</h1>
         </div>
     </div>
     
     <div class="row">
-        <div class="col-centered col-xs-8 col-xs-offset-2 center">
+        <div class="col-centered col-xs-10 col-xs-offset-1 center">
             <img id="avatar" src="about:blank" class="img-circle" />
         </div>
     </div>
 
     <div class="row">
-        <div class="col-xs-8 col-xs-offset-2">
+        <div class="col-xs-8 col-xs-offset-2 center">
             <h1><span id="amount_label"></span> <small id="currency_label"></small></h1>
         </div>
     </div>
@@ -156,7 +157,7 @@
             order.setAttribute("id", "order-info-" + orderId)
             order.setAttribute("data-orderid", orderId)
             order.setAttribute("data-storeid", groupName)
-            order.innerHTML = "Scan " + amount + " " + currency;
+            order.innerHTML = "Simulera scan " + amount + " " + currency;
             
             document.querySelector('#orders').appendChild(order);
             
