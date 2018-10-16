@@ -24,6 +24,8 @@ namespace sellerproto.Controllers
 
         private readonly ILogger _logger;
 
+        public string UserId { get; private set; }
+
         public WalletController(IStoreService storeService, IRepository<Deposit> depositRepository, ILogger<WalletController> logger)
         {
             _storeService = storeService;
@@ -34,13 +36,16 @@ namespace sellerproto.Controllers
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             base.OnActionExecuting(context);
+            UserId = XingZen.Domain.Services.IdentityService.UserId(User);
             ViewData["mode"] = "embedded";
         }
 
         [Authorize, HttpGet]
         public async Task<IActionResult> Index(string walletId = "DefaultWallet", bool onlyContent = false)
         {
-            var deposits = await _depositRepository.All(walletId);
+            var id = GenerateWalletId(walletId);
+
+            var deposits = await _depositRepository.All(id);
 
             var balances = deposits.GroupBy(d => d.Currency)
             .Select(g =>
@@ -78,17 +83,26 @@ namespace sellerproto.Controllers
         [HttpGet]
         public IActionResult Deposit(string id = "DefaultWallet")
         {
-            ViewData["WalletId"] = id;
+            ViewData["WalletId"] = GenerateWalletId(id);
             return View(model: id);
         }
 
+        private object GenerateWalletId(string id)
+        {
+            return UserId + "-" + id;
+        }
+
         [HttpGet]
-        public IActionResult Scanner(string id, string s = "", string o = "")
+        public IActionResult Scanner(string id = "DefaultWallet", string s = "", string o = "")
         {
             var email = XingZen.Domain.Services.IdentityService.Email(User);
+            var name = XingZen.Domain.Services.IdentityService.Name(User);
+
+            ViewData["WalletId"] = GenerateWalletId(id);
             ViewData["InitStoreId"] = s;
             ViewData["InitOrderId"] = o;
-            ViewData["Buyer"] = HashingUtil.CalculateMD5Hash(email.ToLower());
+            ViewData["BuyerId"] = HashingUtil.CalculateMD5Hash(email.ToLower());
+            ViewData["BuyerName"] = name;
 
             return View(model: id);
         }

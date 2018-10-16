@@ -7,7 +7,8 @@
     var initStoreId = ViewData["InitStoreId"];
     var initOrderId = ViewData["InitOrderId"];
     
-    var buyer = ViewData["Buyer"]?.ToString();
+    var buyerId = ViewData["BuyerId"]?.ToString();
+    var buyerName = ViewData["BuyerName"]?.ToString();
 }
 
 <div id="waiting">
@@ -15,9 +16,6 @@
         <div class="col-xs-8 col-xs-offset-2">
             <h3>Scanna en kod</h3>
             <div class="well">
-                <!-- video id="scancam" autoplay playsinline style="border:solid 1px blue;width:100%;"></video>
-                <hr/>
-                -->
                 Registrera köp i kassan...
                 <hr/>
                 <div id="orders"></div>
@@ -70,7 +68,8 @@
                 <input type="hidden" name="amount" id="amount" value="0" />
                 <input type="hidden" name="currency" id="currency" value="SEK" />
                 <input type="hidden" name="walletId" value="@walletId" />
-                <input type="hidden" name="buyer" value="@buyer" />
+                <input type="hidden" name="buyerId" value="@buyerId" />
+                <input type="hidden" name="buyerName" value="@buyerName" />
                 <input type="submit" value="OK" class="input input-lg input-default"/>
                 <input type="reset" value="Avbryt"  class="input input-lg"/>
             </form>

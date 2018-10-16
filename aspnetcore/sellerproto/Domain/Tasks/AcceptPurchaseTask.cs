@@ -15,7 +15,10 @@ namespace sellerproto.Tasks
         public string WalletId { get; set; }
 
         [Required]
-        public string Buyer { get; set; }
+        public string BuyerId { get; set; }
+
+        [Required]
+        public string BuyerName { get; set; }
 
         [Required]
         public double Amount { get; set; }

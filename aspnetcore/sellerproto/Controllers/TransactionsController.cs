@@ -11,6 +11,7 @@ using sellerproto.Tasks;
 using XingZen.Domain.Repositories.Interfaces;
 using XingZen.Domain.Model;
 using Swizkon.Infrastructure.Generators.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace sellerproto.Controllers
 {
@@ -23,12 +24,15 @@ namespace sellerproto.Controllers
 
         private readonly IHubContext<TransactionHub> _transactionHub;
 
-        public TransactionsController(IRepository<PurchaseOrder> purchaseOrderRepository, IRepository<Deposit> depositRepository, IGenerator generator, IHubContext<TransactionHub> transactionHub)
+        private readonly ILogger<TransactionsController> _logger;
+
+        public TransactionsController(IRepository<PurchaseOrder> purchaseOrderRepository, IRepository<Deposit> depositRepository, IGenerator generator, IHubContext<TransactionHub> transactionHub, ILogger<TransactionsController> logger)
         {
             this.purchaseOrderRepository = purchaseOrderRepository;
             _depositRepository = depositRepository;
             _generator = generator;
             _transactionHub = transactionHub;
+            _logger = logger;
         }
 
         public IActionResult Index()
@@ -47,6 +51,8 @@ namespace sellerproto.Controllers
         [HttpPost]
         public IActionResult PlacePurchaseOrder([FromBody] CreatePurchaseOrderTask purchaseOrder)
         {
+            _logger.LogInformation($"PlacePurchaseOrder {purchaseOrder.Amount} {purchaseOrder.Currency} from {purchaseOrder.SalesPerson} to {purchaseOrder.StoreId}");
+            
             var order = new PurchaseOrder(purchaseOrderId: _generator.Next().ToString(),
                                             storeId: purchaseOrder.StoreId,
                                             salesPerson: purchaseOrder.SalesPerson,
@@ -70,7 +76,9 @@ namespace sellerproto.Controllers
         [HttpPost]
         public async Task<IActionResult> AcceptPurchase([FromBody] AcceptPurchaseTask purchaseOrder)
         {
-            // TODO Fix correct domain for this transaction
+            _logger.LogInformation($"AcceptPurchase {purchaseOrder.Amount} {purchaseOrder.Currency} from {purchaseOrder.BuyerName} to {purchaseOrder.StoreId}");
+            
+            // TODO Fix correct domain for this transaction, ie bi-transaction or purchase
             var deposit = new Deposit(
                     depositId: _generator.Next().ToString(),
                     walletId: purchaseOrder.WalletId,
@@ -87,7 +95,8 @@ namespace sellerproto.Controllers
                                                      purchaseOrder.WalletId,
                                                      purchaseOrder.Amount,
                                                      purchaseOrder.Currency,
-                                                     purchaseOrder.Buyer });
+                                                     purchaseOrder.BuyerId,
+                                                     purchaseOrder.BuyerName });
 
             await _transactionHub.Clients
                             .Group("Wallet" + purchaseOrder.WalletId)
@@ -97,7 +106,8 @@ namespace sellerproto.Controllers
                                                      purchaseOrder.WalletId,
                                                      purchaseOrder.Amount,
                                                      purchaseOrder.Currency,
-                                                     purchaseOrder.Buyer });
+                                                     purchaseOrder.BuyerId,
+                                                     purchaseOrder.BuyerName });
 
             return new OkObjectResult(purchaseOrder);
         }
@@ -105,6 +115,7 @@ namespace sellerproto.Controllers
         [HttpPost]
         public async Task<IActionResult> MakeDeposit([FromBody] MakeDepositTask depositTask)
         {
+            _logger.LogInformation($"Deposit {depositTask.Amount} {depositTask.Currency} to {depositTask.WalletId}");
             var deposit = new Deposit(
                     depositId: _generator.Next().ToString(),
                     walletId: depositTask.WalletId,

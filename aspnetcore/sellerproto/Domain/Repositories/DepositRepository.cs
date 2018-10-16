@@ -20,7 +20,6 @@ namespace XingZen.Domain.Repositories
             walletId: tableEntity.WalletId,
              amount: Convert.ToDecimal(tableEntity.Amount),
              currency: tableEntity.Currency);
-
         }
 
         protected override DepositMap ToTableEntity(Deposit domainEntity)
