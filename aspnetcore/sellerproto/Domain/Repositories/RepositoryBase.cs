@@ -19,7 +19,6 @@ namespace XingZen.Domain.Repositories
         protected RepositoryBase(IConfiguration configuration, ILogger logger)
         {
             _logger = logger;
-            _logger.LogInformation("This is RepositoryBase");
             var connectionString = configuration["Azure:StorageConnectionString"];
             var cloudStorageAccount = CloudStorageAccount.Parse(connectionString);
             _tableClient = cloudStorageAccount.CreateCloudTableClient();
@@ -53,15 +52,7 @@ namespace XingZen.Domain.Repositories
                                 .Select(ToDomainEntity)
                                 .FirstOrDefault();
         }
-
-        // private async Task<TMapping> Put(object partition, TDomain domainEntity)
-        // {
-        //     var tableEntity = ToTableEntity(domainEntity);
-        //     tableEntity.PartitionKey = partition.ToString();
-        //     var result = await _table.ExecuteAsync(TableOperation.Insert(tableEntity));
-        //     return (TMapping)result.Result;
-        // }
-
+        
         private async Task<IEnumerable<TDomain>> GetAllDomainEntities(object partition)
         {
             var query = new TableQuery<TMapping>();
