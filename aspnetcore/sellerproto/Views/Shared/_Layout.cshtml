@@ -25,6 +25,16 @@ var bodyClass = ViewData["mode"]?.ToString();
 </head>
 <body class="@bodyClass">
     
+    
+    <div class="container body-content">
+        @RenderBody()
+        <!-- hr />
+        <footer>
+            <p>&copy; 2018 - Swizkon</p>
+        </footer -->
+    </div>
+
+    
     <nav class="navbar navbar-inverse navbar-fixed-bottom">
         <div class="container">
             <div class="navbar-header">
@@ -45,14 +55,6 @@ var bodyClass = ViewData["mode"]?.ToString();
             </div>
         </div>
     </nav>
-    
-    <div class="container body-content">
-        @RenderBody()
-        <!-- hr />
-        <footer>
-            <p>&copy; 2018 - Swizkon</p>
-        </footer -->
-    </div>
 
     
     @RenderSection("footer", required: false)

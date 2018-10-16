@@ -27,17 +27,27 @@
 
 
 <div id="purchase_confirmed">
-    
     <div class="row">
         <div class="col-xs-10 col-xs-offset-1">
             <h1>Köpet bekräftat</h1>
             <div class="well">
                 Du betalade 100 SEK till JONAS JERNDIN
             </div>
-            <input type="button" id="reset_scanner" value="Scanna igen" class="input input-lg input-default"/>
+            <input type="button" id="reset_scanner" value="Scanna igen" class="input input-lg input-default restart_scanner" />
         </div>
     </div>
+</div>
 
+<div id="purchase_cancelled">
+    <div class="row">
+        <div class="col-xs-10 col-xs-offset-1">
+            <h1>Köpet avbröts</h1>
+            <div class="well">
+                Information om det avbrutna köpet kan visas här.
+            </div>
+            <input type="button" id="restart_scanner" value="Scanna igen" class="input input-lg input-default restart_scanner"/>
+        </div>
+    </div>
 </div>
 
 
@@ -72,7 +82,7 @@
                 <input type="hidden" name="buyerId" value="@buyerId" />
                 <input type="hidden" name="buyerName" value="@buyerName" />
                 <input type="submit" value="OK" class="input input-lg input-default"/>
-                <input type="reset" value="Avbryt"  class="input input-lg"/>
+                <input type="reset" id="cancel_scanner" value="Avbryt"  class="input input-lg"/>
             </form>
         </div>
     </div>
@@ -121,6 +131,10 @@
         transitionView("#purchase_confirmed", "#waiting");
     }
 
+    function cancelPurchase() {
+        transitionView("#confirm_purchase", "#purchase_cancelled");
+    }
+
     function transitionView(from, to) {
         $(from).fadeOut(function(){
             $(to).fadeIn();
@@ -140,8 +154,12 @@
         $("#purchase_confirmed").hide();
         $("#waiting").fadeIn();
 
-        $('#reset_scanner').click(function(){
+        $('.restart_scanner').click(function(){
             resetScanner();
+        });
+        
+        $('#cancel_scanner').click(function(){
+            cancelPurchase();
         });
 
         connection = connection = new signalR.HubConnectionBuilder()

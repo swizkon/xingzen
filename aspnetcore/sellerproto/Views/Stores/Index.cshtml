@@ -3,33 +3,42 @@
     ViewData["Title"] = "Dina butiker";
 }
 
-<h1>@ViewData["Title"]</h1>
 
-<p class="lead">
-    I demon används butiker för att registrera köp som kan scannas av köpare.
-</p>
+    <div class="row">
+        <div class="col-xs-10 col-xs-offset-1">
+            <h1>@ViewData["Title"]</h1>
 
-<p>
-    En butik kan exempelvis skapas för "Alice blocket annonser", "Jonas & Jennys loppis" eller "Klass 3E fika"
-</p>
+            <p class="lead">
+                I demon används butiker för att registrera betalningar som kan scannas av köpare.
+            </p>
 
+            <p>
+                En butik kan exempelvis skapas för "Alice blocket annonser", "Jonas & Jennys loppis" eller "Klass 3E fika"
+            </p>
+
+        </div>
+    </div>
+
+<hr />
+
+    <div class="row">
+        <div class="col-xs-6 col-xs-offset-1">
 @foreach (var store in Model) {
     <div>
         <h3>
-            @store.Name 
-            <small>@store.Id</small>
+            @store.Name
         </h3>
         <a asp-action="CashRegister" asp-route-id="@store.Id">Skapa köp</a>
         |
         <a asp-action="Display" asp-route-id="@store.Id">Skärm för kund att scanna</a>
     </div>
 } 
-
-
-<div>
-    <h2>Skapa en butik</h2>
-    <form action="/Stores/createStore" method="POST">
-    <input type="text" name="name"/>
-    <input type="submit" value="OK" />
-    </form>
-</div>
+        </div>
+        <div class="col-xs-4 well">
+            <h2>Skapa en butik</h2>
+            <form action="/Stores/createStore" method="POST">
+            <input type="text" name="name"/>
+            <input type="submit" value="OK" />
+            </form>
+        </div>
+    </div>
