@@ -21,6 +21,30 @@ namespace XingZen.Configuration
 
     public static class ServicesConfigurationExtensions
     {
+        public static void AddSimpleCookieAuthentication(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddAuthentication(
+                    options =>
+                    {
+                        options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                        options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                        options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    })
+                    .AddCookie(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    o =>
+                    {
+                        o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                        o.Cookie.SameSite = SameSiteMode.Lax;
+                        o.Cookie.Name = "xingzen";
+                        o.Cookie.Expiration = TimeSpan.FromMinutes(30);
+                        o.SlidingExpiration = true;
+                        o.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+                        o.LoginPath = new PathString("/session/signin");
+                        o.LogoutPath = new PathString("/session/signout");
+                    });
+        }
+
         public static void AddOpenIdConnect(this IServiceCollection services, IConfiguration configuration)
         {
             var openIdConnectSettings = new OpenIdConnectSettings();
