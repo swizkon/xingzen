@@ -131,10 +131,6 @@
         transitionView("#purchase_confirmed", "#waiting");
     }
 
-    function cancelPurchase() {
-        transitionView("#confirm_purchase", "#purchase_cancelled");
-    }
-
     function transitionView(from, to) {
         $(from).fadeOut(function(){
             $(to).fadeIn();
@@ -152,14 +148,22 @@
         $("#waiting").hide();
         $("#confirm_purchase").hide();
         $("#purchase_confirmed").hide();
+        $("#purchase_cancelled").hide();
         $("#waiting").fadeIn();
 
-        $('.restart_scanner').click(function(){
-            resetScanner();
+        $('#reset_scanner').click(function(){
+            $("#confirm_purchase").hide();
+            transitionView("#purchase_confirmed", "#waiting");
         });
         
+        $('#restart_scanner').click(function(){
+            $("#purchase_confirmed").hide();
+            transitionView("#purchase_cancelled", "#waiting");
+        });
+
+        // restart_scanner
         $('#cancel_scanner').click(function(){
-            cancelPurchase();
+            transitionView("#confirm_purchase", "#purchase_cancelled");
         });
 
         connection = connection = new signalR.HubConnectionBuilder()
