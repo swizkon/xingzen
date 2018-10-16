@@ -1,9 +1,17 @@
 ﻿@model IList<XingZen.Domain.Model.Store>
 @{
-    ViewData["Title"] = "Stores";
+    ViewData["Title"] = "Dina butiker";
 }
 
 <h1>@ViewData["Title"]</h1>
+
+<p class="lead">
+    I demon används butiker för att registrera köp som kan scannas av köpare.
+</p>
+
+<p>
+    En butik kan exempelvis skapas för "Alice blocket annonser", "Jonas & Jennys loppis" eller "Klass 3E fika"
+</p>
 
 @foreach (var store in Model) {
     <div>
@@ -11,21 +19,17 @@
             @store.Name 
             <small>@store.Id</small>
         </h3>
-            <a asp-action="Display" asp-route-id="@store.Id">Display</a>
-            <a asp-action="CashRegister" asp-route-id="@store.Id">CashRegister</a>
+        <a asp-action="CashRegister" asp-route-id="@store.Id">Skapa köp</a>
+        |
+        <a asp-action="Display" asp-route-id="@store.Id">Skärm för kund att scanna</a>
     </div>
 } 
 
 
 <div>
-    <h2>Create new store</h2>
+    <h2>Skapa en butik</h2>
     <form action="/Stores/createStore" method="POST">
     <input type="text" name="name"/>
-    <input type="submit" />
+    <input type="submit" value="OK" />
     </form>
-</div>
-
-
-<div>    
-UserClaims: @ViewData["UserClaims"]
 </div>

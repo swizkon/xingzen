@@ -37,7 +37,7 @@ namespace sellerproto.Controllers
         {
             base.OnActionExecuting(context);
             UserId = XingZen.Domain.Services.IdentityService.UserId(User);
-            ViewData["mode"] = "embedded";
+            // ViewData["mode"] = "embedded";
         }
 
         [Authorize, HttpGet]
