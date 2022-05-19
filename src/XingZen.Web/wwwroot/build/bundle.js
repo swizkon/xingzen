@@ -3597,7 +3597,7 @@ var app = (function () {
     const { console: console_1 } = globals;
     const file = "svelte-app\\App.svelte";
 
-    // (65:2) {:else}
+    // (76:2) {:else}
     function create_else_block_1(ctx) {
     	let span;
 
@@ -3605,7 +3605,7 @@ var app = (function () {
     		c: function create() {
     			span = element("span");
     			span.textContent = " ";
-    			add_location(span, file, 64, 9, 1641);
+    			add_location(span, file, 75, 9, 2027);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -3620,21 +3620,20 @@ var app = (function () {
     		block,
     		id: create_else_block_1.name,
     		type: "else",
-    		source: "(65:2) {:else}",
+    		source: "(76:2) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (63:2) {#if $isAuthenticated}
+    // (74:2) {#if $isAuthenticated}
     function create_if_block_1(ctx) {
     	let span;
     	let t0;
     	let t1_value = /*$user*/ ctx[3].name + "";
     	let t1;
     	let t2;
-    	let t3_value = /*$user*/ ctx[3].email + "";
     	let t3;
     	let t4;
 
@@ -3644,10 +3643,10 @@ var app = (function () {
     			t0 = text("  ");
     			t1 = text(t1_value);
     			t2 = text(" (");
-    			t3 = text(t3_value);
+    			t3 = text(/*$user*/ ctx[3]);
     			t4 = text(")");
     			attr_dev(span, "class", "text-white");
-    			add_location(span, file, 63, 2, 1558);
+    			add_location(span, file, 74, 2, 1950);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -3659,7 +3658,7 @@ var app = (function () {
     		},
     		p: function update(ctx, dirty) {
     			if (dirty & /*$user*/ 8 && t1_value !== (t1_value = /*$user*/ ctx[3].name + "")) set_data_dev(t1, t1_value);
-    			if (dirty & /*$user*/ 8 && t3_value !== (t3_value = /*$user*/ ctx[3].email + "")) set_data_dev(t3, t3_value);
+    			if (dirty & /*$user*/ 8) set_data_dev(t3, /*$user*/ ctx[3]);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(span);
@@ -3670,14 +3669,14 @@ var app = (function () {
     		block,
     		id: create_if_block_1.name,
     		type: "if",
-    		source: "(63:2) {#if $isAuthenticated}",
+    		source: "(74:2) {#if $isAuthenticated}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (70:2) {:else}
+    // (81:2) {:else}
     function create_else_block(ctx) {
     	let li;
     	let a;
@@ -3691,9 +3690,9 @@ var app = (function () {
     			a.textContent = "Log In";
     			attr_dev(a, "class", "nav-link");
     			attr_dev(a, "href", "/#");
-    			add_location(a, file, 71, 4, 1834);
+    			add_location(a, file, 82, 4, 2220);
     			attr_dev(li, "class", "nav-item");
-    			add_location(li, file, 70, 2, 1807);
+    			add_location(li, file, 81, 2, 2193);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, li, anchor);
@@ -3716,14 +3715,14 @@ var app = (function () {
     		block,
     		id: create_else_block.name,
     		type: "else",
-    		source: "(70:2) {:else}",
+    		source: "(81:2) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (66:2) {#if $isAuthenticated}
+    // (77:2) {#if $isAuthenticated}
     function create_if_block(ctx) {
     	let li;
     	let a;
@@ -3737,9 +3736,9 @@ var app = (function () {
     			a.textContent = "Log Out";
     			attr_dev(a, "class", "nav-link");
     			attr_dev(a, "href", "/#");
-    			add_location(a, file, 67, 4, 1722);
+    			add_location(a, file, 78, 4, 2108);
     			attr_dev(li, "class", "nav-item");
-    			add_location(li, file, 66, 2, 1695);
+    			add_location(li, file, 77, 2, 2081);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, li, anchor);
@@ -3762,14 +3761,14 @@ var app = (function () {
     		block,
     		id: create_if_block.name,
     		type: "if",
-    		source: "(66:2) {#if $isAuthenticated}",
+    		source: "(77:2) {#if $isAuthenticated}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (79:6) <Link to="/">
+    // (90:6) <Link to="/">
     function create_default_slot_2(ctx) {
     	let t;
 
@@ -3789,14 +3788,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_2.name,
     		type: "slot",
-    		source: "(79:6) <Link to=\\\"/\\\">",
+    		source: "(90:6) <Link to=\\\"/\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (82:6) <Route path="spinner/:id" let:params>
+    // (93:6) <Route path="spinner/:id" let:params>
     function create_default_slot_1(ctx) {
     	let spinnerdetails;
     	let current;
@@ -3837,14 +3836,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_1.name,
     		type: "slot",
-    		source: "(82:6) <Route path=\\\"spinner/:id\\\" let:params>",
+    		source: "(93:6) <Route path=\\\"spinner/:id\\\" let:params>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (77:2) <Router {url}>
+    // (88:2) <Router {url}>
     function create_default_slot(ctx) {
     	let nav;
     	let link;
@@ -3893,8 +3892,8 @@ var app = (function () {
     			create_component(route0.$$.fragment);
     			t1 = space();
     			create_component(route1.$$.fragment);
-    			add_location(nav, file, 77, 4, 1939);
-    			add_location(div, file, 80, 4, 1994);
+    			add_location(nav, file, 88, 4, 2325);
+    			add_location(div, file, 91, 4, 2380);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, nav, anchor);
@@ -3949,7 +3948,7 @@ var app = (function () {
     		block,
     		id: create_default_slot.name,
     		type: "slot",
-    		source: "(77:2) <Router {url}>",
+    		source: "(88:2) <Router {url}>",
     		ctx
     	});
 
@@ -3963,8 +3962,6 @@ var app = (function () {
     	let t1;
     	let t2;
     	let t3;
-    	let t4;
-    	let t5;
     	let router;
     	let current;
 
@@ -3997,18 +3994,16 @@ var app = (function () {
     		c: function create() {
     			main = element("main");
     			h1 = element("h1");
-    			t0 = text("Hello ");
-    			t1 = text(/*name*/ ctx[0]);
-    			t2 = text("!");
-    			t3 = space();
+    			t0 = text(/*name*/ ctx[0]);
+    			t1 = space();
     			if_block0.c();
-    			t4 = space();
+    			t2 = space();
     			if_block1.c();
-    			t5 = space();
+    			t3 = space();
     			create_component(router.$$.fragment);
-    			add_location(h1, file, 61, 2, 1506);
+    			add_location(h1, file, 72, 2, 1905);
     			attr_dev(main, "class", "svelte-11721hq");
-    			add_location(main, file, 60, 0, 1496);
+    			add_location(main, file, 71, 0, 1895);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -4017,18 +4012,16 @@ var app = (function () {
     			insert_dev(target, main, anchor);
     			append_dev(main, h1);
     			append_dev(h1, t0);
-    			append_dev(h1, t1);
-    			append_dev(h1, t2);
-    			append_dev(main, t3);
+    			append_dev(main, t1);
     			if_block0.m(main, null);
-    			append_dev(main, t4);
+    			append_dev(main, t2);
     			if_block1.m(main, null);
-    			append_dev(main, t5);
+    			append_dev(main, t3);
     			mount_component(router, main, null);
     			current = true;
     		},
     		p: function update(ctx, [dirty]) {
-    			if (!current || dirty & /*name*/ 1) set_data_dev(t1, /*name*/ ctx[0]);
+    			if (!current || dirty & /*name*/ 1) set_data_dev(t0, /*name*/ ctx[0]);
 
     			if (current_block_type === (current_block_type = select_block_type(ctx)) && if_block0) {
     				if_block0.p(ctx, dirty);
@@ -4038,7 +4031,7 @@ var app = (function () {
 
     				if (if_block0) {
     					if_block0.c();
-    					if_block0.m(main, t4);
+    					if_block0.m(main, t2);
     				}
     			}
 
@@ -4050,7 +4043,7 @@ var app = (function () {
 
     				if (if_block1) {
     					if_block1.c();
-    					if_block1.m(main, t5);
+    					if_block1.m(main, t3);
     				}
     			}
 
@@ -4108,9 +4101,20 @@ var app = (function () {
     	onMount(async () => {
     		auth0Client = await auth.createClient();
     		console.log('auth0Client', auth0Client);
+    		const u = await auth0Client.getUser();
+    		console.log('auth0Client user', u);
     		isAuthenticated.set(await auth0Client.isAuthenticated());
-    		user.set(await auth0Client.getUser());
+    		user.set(u);
+    		const claims = await auth0Client.getIdTokenClaims();
 
+    		// if you need the raw id_token, you can access it
+    		// using the __raw property 
+    		const id_token = claims && claims.__raw;
+
+    		console.log('id_token', id_token);
+
+    		// const token = await auth0Client.getTokenSilently();
+    		// console.log('getTokenSilently', token);
     		fetch("/api/spinner").then(response => response.json()).then(data => {
     			apiData.set(data);
     		}).catch(error => {
@@ -4231,7 +4235,7 @@ var app = (function () {
     const app = new App({
     	target: document.body,
     	props: {
-    		name: 'xing zen app'
+    		name: 'Qian cash'
     	}
     });
 

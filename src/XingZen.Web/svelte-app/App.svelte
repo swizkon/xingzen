@@ -14,10 +14,22 @@
 
   onMount(async () => {
     auth0Client = await auth.createClient();
-        console.log('auth0Client', auth0Client);
+    console.log('auth0Client', auth0Client);
+
+    const u = await auth0Client.getUser();
+    console.log('auth0Client user', u);
 
     isAuthenticated.set(await auth0Client.isAuthenticated());
-    user.set(await auth0Client.getUser());
+    user.set(u);
+
+    const claims = await auth0Client.getIdTokenClaims();
+    // if you need the raw id_token, you can access it
+    // using the __raw property 
+    const id_token = claims && claims.__raw;
+    console.log('id_token', id_token);
+
+    // const token = await auth0Client.getTokenSilently();
+    // console.log('getTokenSilently', token);
 
     fetch("/api/spinner")
       .then((response) => response.json())
@@ -30,7 +42,6 @@
       });
   });
 
-  
   function login() {
     auth.loginWithPopup(auth0Client);
   }
@@ -59,9 +70,9 @@
 </script>
 
 <main>
-  <h1>Hello {name}!</h1>
+  <h1>{name}</h1>
   {#if $isAuthenticated}
-  <span class="text-white">&nbsp;&nbsp;{$user.name} ({$user.email})</span>
+  <span class="text-white">&nbsp;&nbsp;{$user.name} ({$user})</span>
   {:else}<span>&nbsp;</span>{/if}
   {#if $isAuthenticated}
   <li class="nav-item">
@@ -82,7 +93,6 @@
       <Route path="spinner/:id" let:params>
         <SpinnerDetails id={params.id} />
       </Route>
-      <!-- <Route path="spinner/:id" component={SpinnerDetails} /> -->
       <Route path="/" component={SpinnerList} />
     </div>
   </Router>
