@@ -1,3 +1,4 @@
+using QianCash.Web.Configuration;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,9 +10,13 @@ builder.Services.AddControllers().AddDapr();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddAuth0Authentication();
+
 builder.Host.UseSerilog((ctx, lc) => lc
     .WriteTo.Console()
     .WriteTo.Seq("http://localhost:5341"));
+
+builder.Configuration.AddUserSecrets<Program>();
 
 var app = builder.Build();
 
@@ -26,8 +31,21 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors("AllowAll");
+
+app.UseDefaultFiles();
+app.UseStaticFiles();
+app.UseRouting();
+
+app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
+// app.MapControllers();
+
+app.UseEndpoints(config =>
+{
+    config.MapControllers();
+    config.MapFallbackToFile("index.html").AllowAnonymous();
+});
 
 app.Run();

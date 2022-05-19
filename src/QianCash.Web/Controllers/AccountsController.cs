@@ -17,6 +17,12 @@ public class AccountsController : ControllerBase
         _logger = logger;
     }
 
+    [HttpGet]
+    public IEnumerable<string> GetAccounts()
+    {
+        return new [] {"jonas", "jenny"};
+    }
+
     [HttpGet("balance/{accountNumber}")]
     public AccountBalance GetAccountBalance(
         [FromState(StoreName, "accountNumber")] StateEntry<AccountBalance> balance)
