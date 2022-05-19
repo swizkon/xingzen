@@ -36,12 +36,15 @@ public class AccountsController : ControllerBase
             Balances = new List<Funds>()
         };
 
-        balance.Value.Balances = balance.Value.Balances.Where(x => x.Currency != currency)
+        balance.Value.Balances = balance.Value
+            .Balances
+            .Where(x => x.Currency != currency)
             .Append(new Funds
             {
                 Amount = amount,
                 Currency = currency
-            }).ToList();
+            })
+            .ToList();
 
         balance.Value.LastSync = DateTimeOffset.UtcNow;
 
