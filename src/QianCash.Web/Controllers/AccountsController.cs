@@ -5,7 +5,7 @@ using QianCash.Core;
 namespace QianCash.Web.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class AccountsController : ControllerBase
 {
     const string StoreName = "statestore";
@@ -50,6 +50,7 @@ public class AccountsController : ControllerBase
                 Amount = amount,
                 Currency = currency
             })
+            .OrderBy(x => x.Currency)
             .ToList();
 
         balance.Value.LastSync = DateTimeOffset.UtcNow;

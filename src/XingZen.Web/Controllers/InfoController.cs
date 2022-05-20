@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +26,7 @@ namespace XingZen.Web.Controllers
         {
             _logger.LogInformation("User: " + HttpContext?.User?.Identity?.Name);
 
-            var data = string.Join(", ", HttpContext.User.Claims.Select(x => x.Type));
+            var data = string.Join(", ", HttpContext?.User.Claims.Select(x => x.Type) ?? Array.Empty<string>());
 
             return Ok(data);
         }

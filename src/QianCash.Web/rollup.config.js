@@ -17,7 +17,7 @@ function serve() {
 	return {
 		writeBundle() {
 			if (server) return;
-			server = require('child_process').spawn('dotnet', ['watch', 'run'], {
+			server = require('child_process').spawn('dapr run --app-id qiancash --app-ssl dotnet', ['watch', 'run'], {
 				stdio: ['ignore', 'inherit', 'inherit'],
 				shell: true
 			});

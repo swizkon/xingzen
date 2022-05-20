@@ -2,11 +2,11 @@
   import { onMount } from "svelte";
   import { apiData, spinners } from "../data/stores.js";
 
-  import SpinnerItem from "../Components/SpinnerItem.svelte";
+  import ImpersonateItem from "../Components/ImpersonateItem.svelte";
   import SpinnerForm from "../Components/SpinnerForm.svelte";
 
   onMount(async () => {
-    fetch("/api/spinner")
+    fetch("/api/accounts")
       .then((response) => response.json())
       .then((data) => {
         apiData.set(data);
@@ -33,12 +33,12 @@
   }
 </script>
 
-  <h2>Spinners:</h2>
+  <h2>Impersonate:</h2>
   {#each $spinners as spinner}
-    <SpinnerItem
+    <ImpersonateItem
       {spinner}
-      name={spinner.name}
-      id={spinner.id}
+      name={spinner}
+      id={spinner}
       on:delete={handleDelete}
     />
   {/each}

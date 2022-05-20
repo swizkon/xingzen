@@ -1,32 +1,39 @@
 <script>
   import { onMount } from "svelte";
-  
+
   import auth from "./authService";
 
-  import { apiData, spinners, isAuthenticated, user, user_tasks, tasks } from "./data/stores.js";
+  import {
+    apiData,
+    spinners,
+    isAuthenticated,
+    user,
+    user_tasks,
+    tasks,
+  } from "./data/stores.js";
   import { Router, Link, Route } from "svelte-routing";
 
-  import SpinnerList from "./Components/SpinnerList.svelte";
+  import ImpersonateList from "./Components/ImpersonateList.svelte";
 
-  import SpinnerDetails from "./Components/SpinnerDetails.svelte";
+  import UserDetails from "./Components/UserDetails.svelte";
 
   let auth0Client;
 
   onMount(async () => {
     auth0Client = await auth.createClient();
-    console.log('auth0Client', auth0Client);
+    console.log("auth0Client", auth0Client);
 
     const u = await auth0Client.getUser();
-    console.log('auth0Client user', u);
+    console.log("auth0Client user", u);
 
     isAuthenticated.set(await auth0Client.isAuthenticated());
     user.set(u);
 
     const claims = await auth0Client.getIdTokenClaims();
     // if you need the raw id_token, you can access it
-    // using the __raw property 
+    // using the __raw property
     const id_token = claims && claims.__raw;
-    console.log('id_token', id_token);
+    console.log("id_token", id_token);
 
     // const token = await auth0Client.getTokenSilently();
     // console.log('getTokenSilently', token);
@@ -70,32 +77,38 @@
 </script>
 
 <main>
-  <h1>{name}</h1>
   {#if $isAuthenticated}
-  <span class="text-white">&nbsp;&nbsp;{$user.name} ({$user})</span>
+    <span class="text-white">&nbsp;&nbsp;{$user.name} ({$user})</span>
   {:else}<span>&nbsp;</span>{/if}
   {#if $isAuthenticated}
-  <li class="nav-item">
-    <a class="nav-link" href="/#" on:click="{logout}">Log Out</a>
-  </li>
+    <a class="nav-link" href="/#" on:click={logout}>Log Out</a>
   {:else}
-  <li class="nav-item">
-    <a class="nav-link" href="/#" on:click="{login}">Log In</a>
-  </li>
+    <a class="nav-link" href="/#" on:click={login}>Log In</a>
   {/if}
 
+  <h1>{name}</h1>
 
   <Router {url}>
     <nav>
       <Link to="/">Home</Link>
     </nav>
     <div>
-      <Route path="spinner/:id" let:params>
-        <SpinnerDetails id={params.id} />
+      <Route path="users/:id" let:params>
+        <UserDetails id={params.id} />
       </Route>
-      <Route path="/" component={SpinnerList} />
+      <Route path="/" component={ImpersonateList} />
     </div>
-  </Router>
+  </Router> 
+<pre>
+------------------------------------------------------------------
+________        _____        _________________ 
+___  __ )______ __  /_______ __  ____/___  __ \
+__  __  |_  __ \_  __/_  __ \_  / __  __  /_/ /
+_  /_/ / / /_/ // /_  / /_/ // /_/ /  _  ____/ 
+/_____/  \____/ \__/  \____/ \____/   /_/      
+
+------------------------------------------------------------------
+</pre>
 </main>
 
 <style>
@@ -105,14 +118,6 @@
     max-width: 240px;
     margin: 0 auto;
   }
-  /*
-  h1 {
-    color: #ff3e00;
-    text-transform: uppercase;
-    font-size: 4em;
-    font-weight: 100;
-    text-shadow: 3px 3px 0em #000;
-  }  */
 
   @media (min-width: 640px) {
     main {

@@ -16,7 +16,22 @@ builder.Host.UseSerilog((ctx, lc) => lc
     .WriteTo.Console()
     .WriteTo.Seq("http://localhost:5341"));
 
-builder.Configuration.AddUserSecrets<Program>();
+if (builder.Environment.IsDevelopment())
+    builder.Configuration.AddUserSecrets<Program>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder =>
+    {
+        //builder.AllowAnyOrigin();
+        //builder.AllowAnyHeader();
+        //builder.AllowAnyMethod();
+
+        builder.AllowAnyMethod().AllowAnyHeader();
+        builder.SetIsOriginAllowed((host) => true);
+        builder.AllowCredentials();
+    });
+});
 
 var app = builder.Build();
 
