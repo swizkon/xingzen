@@ -10,8 +10,8 @@ namespace QianCash.Core
     {
         SEK,
         NOK,
-        USD,
+        DKK,
         EUR,
-        DKK
+        USD
     }
 }

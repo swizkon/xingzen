@@ -57,6 +57,13 @@ app.UseAuthorization();
 
 // app.MapControllers();
 
+if (builder.Environment.IsDevelopment())
+    app.Map("/development/environment", () => Environment
+        .GetEnvironmentVariables()
+        .Keys
+        .Cast<string>()
+        .Select(key => $"{key} {Environment.GetEnvironmentVariable(key)}"));
+
 app.UseEndpoints(config =>
 {
     config.MapControllers();
