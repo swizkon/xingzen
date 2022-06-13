@@ -1,4 +1,5 @@
 using QianCash.Web.Configuration;
+using QianCash.Web.EndPoints;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -55,14 +56,14 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// app.MapControllers();
-
 if (builder.Environment.IsDevelopment())
     app.Map("/development/environment", () => Environment
         .GetEnvironmentVariables()
         .Keys
         .Cast<string>()
         .Select(key => $"{key} {Environment.GetEnvironmentVariable(key)}"));
+
+app.MapSettingsEndPoints();
 
 app.UseEndpoints(config =>
 {

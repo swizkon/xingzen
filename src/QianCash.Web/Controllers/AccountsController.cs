@@ -50,6 +50,7 @@ public class AccountsController : ControllerBase
                 Amount = amount,
                 Currency = currency
             })
+            .Where(x => x.Amount > 0)
             .OrderBy(x => x.Currency)
             .ToList();
 
