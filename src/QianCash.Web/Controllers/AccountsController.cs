@@ -33,22 +33,22 @@ public class AccountsController : ControllerBase
     [HttpPut("balance/{accountNumber}/{currency}/{amount}")]
     public async Task<AccountBalance> SetBalance(
         [FromState(StoreName, "accountNumber")] StateEntry<AccountBalance> balance,
-        [FromRoute] string currency,
+        [FromRoute] KnownCurrency currency,
         [FromRoute] decimal amount)
     {
         balance.Value ??= new AccountBalance
         {
             AccountId = balance.Key,
-            Balances = new List<Funds>()
+            Assets = new List<CashAsset>()
         };
 
-        balance.Value.Balances = balance.Value
-            .Balances
-            .Where(x => x.Currency != currency)
-            .Append(new Funds
+        balance.Value.Assets = balance.Value
+            .Assets
+            .Where(x => x.Currency != currency.ToString())
+            .Append(new CashAsset
             {
                 Amount = amount,
-                Currency = currency
+                Currency = currency.ToString()
             })
             .Where(x => x.Amount > 0)
             .OrderBy(x => x.Currency)

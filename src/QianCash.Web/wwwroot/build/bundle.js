@@ -167,6 +167,9 @@ var app = (function () {
             }
         }
     }
+    function to_number(value) {
+        return value === '' ? null : +value;
+    }
     function children(element) {
         return Array.from(element.childNodes);
     }
@@ -2909,11 +2912,11 @@ var app = (function () {
     function create_fragment$3(ctx) {
     	let div;
     	let h2;
-    	let t0_value = /*funds*/ ctx[0].amount + "";
+    	let t0_value = /*asset*/ ctx[0].amount + "";
     	let t0;
     	let t1;
     	let small;
-    	let t2_value = /*funds*/ ctx[0].currency + "";
+    	let t2_value = /*asset*/ ctx[0].currency + "";
     	let t2;
     	let t3;
     	let button0;
@@ -2967,8 +2970,8 @@ var app = (function () {
     			}
     		},
     		p: function update(ctx, [dirty]) {
-    			if (dirty & /*funds*/ 1 && t0_value !== (t0_value = /*funds*/ ctx[0].amount + "")) set_data_dev(t0, t0_value);
-    			if (dirty & /*funds*/ 1 && t2_value !== (t2_value = /*funds*/ ctx[0].currency + "")) set_data_dev(t2, t2_value);
+    			if (dirty & /*asset*/ 1 && t0_value !== (t0_value = /*asset*/ ctx[0].amount + "")) set_data_dev(t0, t0_value);
+    			if (dirty & /*asset*/ 1 && t2_value !== (t2_value = /*asset*/ ctx[0].currency + "")) set_data_dev(t2, t2_value);
     		},
     		i: noop,
     		o: noop,
@@ -2997,31 +3000,31 @@ var app = (function () {
 
     	function decreaseBalance() {
     		dispatch("setBalance", {
-    			currency: funds.currency,
-    			amount: funds.amount - 100
+    			currency: asset.currency,
+    			amount: asset.amount - 100
     		});
     	}
 
     	function increaseBalance() {
     		dispatch("setBalance", {
-    			currency: funds.currency,
-    			amount: funds.amount + 100
+    			currency: asset.currency,
+    			amount: asset.amount + 100
     		});
     	}
 
     	onMount(async () => {
-    		console.log("funds", funds);
+    		console.log("asset", asset);
     	});
 
-    	let { funds } = $$props;
-    	const writable_props = ['funds'];
+    	let { asset } = $$props;
+    	const writable_props = ['asset'];
 
     	Object.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$2.warn(`<FundsItem> was created with unknown prop '${key}'`);
     	});
 
     	$$self.$$set = $$props => {
-    		if ('funds' in $$props) $$invalidate(0, funds = $$props.funds);
+    		if ('asset' in $$props) $$invalidate(0, asset = $$props.asset);
     	};
 
     	$$self.$capture_state = () => ({
@@ -3030,24 +3033,24 @@ var app = (function () {
     		dispatch,
     		decreaseBalance,
     		increaseBalance,
-    		funds
+    		asset
     	});
 
     	$$self.$inject_state = $$props => {
-    		if ('funds' in $$props) $$invalidate(0, funds = $$props.funds);
+    		if ('asset' in $$props) $$invalidate(0, asset = $$props.asset);
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [funds, decreaseBalance, increaseBalance];
+    	return [asset, decreaseBalance, increaseBalance];
     }
 
     class FundsItem extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance$3, create_fragment$3, safe_not_equal, { funds: 0 });
+    		init(this, options, instance$3, create_fragment$3, safe_not_equal, { asset: 0 });
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
@@ -3059,16 +3062,16 @@ var app = (function () {
     		const { ctx } = this.$$;
     		const props = options.props || {};
 
-    		if (/*funds*/ ctx[0] === undefined && !('funds' in props)) {
-    			console_1$2.warn("<FundsItem> was created without expected prop 'funds'");
+    		if (/*asset*/ ctx[0] === undefined && !('asset' in props)) {
+    			console_1$2.warn("<FundsItem> was created without expected prop 'asset'");
     		}
     	}
 
-    	get funds() {
+    	get asset() {
     		throw new Error("<FundsItem>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
 
-    	set funds(value) {
+    	set asset(value) {
     		throw new Error("<FundsItem>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
     }
@@ -3081,15 +3084,16 @@ var app = (function () {
     	let h1;
     	let t0;
     	let t1;
-    	let small;
     	let t2;
+    	let small;
     	let t3;
     	let t4;
     	let t5;
-    	let input;
     	let t6;
-    	let textarea;
+    	let input0;
     	let t7;
+    	let input1;
+    	let t8;
     	let button;
     	let mounted;
     	let dispose;
@@ -3098,25 +3102,29 @@ var app = (function () {
     		c: function create() {
     			div = element("div");
     			h1 = element("h1");
-    			t0 = text(/*name*/ ctx[0]);
-    			t1 = space();
+    			t0 = text("Set funds ");
+    			t1 = text(/*name*/ ctx[0]);
+    			t2 = space();
     			small = element("small");
-    			t2 = text("(");
-    			t3 = text(/*id*/ ctx[1]);
-    			t4 = text(")");
-    			t5 = space();
-    			input = element("input");
+    			t3 = text("(");
+    			t4 = text(/*amount*/ ctx[1]);
+    			t5 = text(")");
     			t6 = space();
-    			textarea = element("textarea");
+    			input0 = element("input");
     			t7 = space();
+    			input1 = element("input");
+    			t8 = space();
     			button = element("button");
-    			button.textContent = "Save";
-    			add_location(small, file$2, 29, 13, 615);
-    			add_location(h1, file$2, 29, 2, 604);
-    			add_location(input, file$2, 30, 2, 645);
-    			add_location(textarea, file$2, 31, 2, 676);
-    			add_location(button, file$2, 32, 2, 701);
-    			add_location(div, file$2, 28, 0, 595);
+    			button.textContent = "OK";
+    			add_location(small, file$2, 32, 23, 757);
+    			add_location(h1, file$2, 32, 2, 736);
+    			add_location(input0, file$2, 33, 2, 791);
+    			attr_dev(input1, "type", "range");
+    			attr_dev(input1, "step", "100");
+    			attr_dev(input1, "max", "2000");
+    			add_location(input1, file$2, 34, 2, 822);
+    			add_location(button, file$2, 35, 2, 890);
+    			add_location(div, file$2, 31, 0, 727);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -3126,21 +3134,25 @@ var app = (function () {
     			append_dev(div, h1);
     			append_dev(h1, t0);
     			append_dev(h1, t1);
+    			append_dev(h1, t2);
     			append_dev(h1, small);
-    			append_dev(small, t2);
     			append_dev(small, t3);
     			append_dev(small, t4);
-    			append_dev(div, t5);
-    			append_dev(div, input);
-    			set_input_value(input, /*name*/ ctx[0]);
+    			append_dev(small, t5);
     			append_dev(div, t6);
-    			append_dev(div, textarea);
+    			append_dev(div, input0);
+    			set_input_value(input0, /*name*/ ctx[0]);
     			append_dev(div, t7);
+    			append_dev(div, input1);
+    			set_input_value(input1, /*amount*/ ctx[1]);
+    			append_dev(div, t8);
     			append_dev(div, button);
 
     			if (!mounted) {
     				dispose = [
-    					listen_dev(input, "input", /*input_input_handler*/ ctx[3]),
+    					listen_dev(input0, "input", /*input0_input_handler*/ ctx[4]),
+    					listen_dev(input1, "change", /*input1_change_input_handler*/ ctx[5]),
+    					listen_dev(input1, "input", /*input1_change_input_handler*/ ctx[5]),
     					listen_dev(button, "click", /*handleUpsert*/ ctx[2], false, false, false)
     				];
 
@@ -3148,11 +3160,15 @@ var app = (function () {
     			}
     		},
     		p: function update(ctx, [dirty]) {
-    			if (dirty & /*name*/ 1) set_data_dev(t0, /*name*/ ctx[0]);
-    			if (dirty & /*id*/ 2) set_data_dev(t3, /*id*/ ctx[1]);
+    			if (dirty & /*name*/ 1) set_data_dev(t1, /*name*/ ctx[0]);
+    			if (dirty & /*amount*/ 2) set_data_dev(t4, /*amount*/ ctx[1]);
 
-    			if (dirty & /*name*/ 1 && input.value !== /*name*/ ctx[0]) {
-    				set_input_value(input, /*name*/ ctx[0]);
+    			if (dirty & /*name*/ 1 && input0.value !== /*name*/ ctx[0]) {
+    				set_input_value(input0, /*name*/ ctx[0]);
+    			}
+
+    			if (dirty & /*amount*/ 2) {
+    				set_input_value(input1, /*amount*/ ctx[1]);
     			}
     		},
     		i: noop,
@@ -3183,8 +3199,9 @@ var app = (function () {
     	function handleUpsert(event) {
     		const payload = { name, ingredients: [] };
 
-    		return fetch(`/api/spinner/${id}/dinners`, {
-    			method: "POST",
+    		// /api/Accounts/balance/{accountNumber}/{currency}/{amount}
+    		return fetch(`/api/accounts/balance/${id}/${currency}/${amount}`, {
+    			method: "PUT",
     			body: JSON.stringify(payload),
     			headers: { "content-type": "application/json" }
     		}).then(response => response.json()).then(d => {
@@ -3194,20 +3211,27 @@ var app = (function () {
 
     	let { name } = $$props;
     	let { id } = $$props;
+    	let amount = 0;
+    	let currency = "SEK";
     	const writable_props = ['name', 'id'];
 
     	Object.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<DinnerForm> was created with unknown prop '${key}'`);
     	});
 
-    	function input_input_handler() {
+    	function input0_input_handler() {
     		name = this.value;
     		$$invalidate(0, name);
     	}
 
+    	function input1_change_input_handler() {
+    		amount = to_number(this.value);
+    		$$invalidate(1, amount);
+    	}
+
     	$$self.$$set = $$props => {
     		if ('name' in $$props) $$invalidate(0, name = $$props.name);
-    		if ('id' in $$props) $$invalidate(1, id = $$props.id);
+    		if ('id' in $$props) $$invalidate(3, id = $$props.id);
     	};
 
     	$$self.$capture_state = () => ({
@@ -3215,25 +3239,36 @@ var app = (function () {
     		dispatch,
     		handleUpsert,
     		name,
-    		id
+    		id,
+    		amount,
+    		currency
     	});
 
     	$$self.$inject_state = $$props => {
     		if ('name' in $$props) $$invalidate(0, name = $$props.name);
-    		if ('id' in $$props) $$invalidate(1, id = $$props.id);
+    		if ('id' in $$props) $$invalidate(3, id = $$props.id);
+    		if ('amount' in $$props) $$invalidate(1, amount = $$props.amount);
+    		if ('currency' in $$props) currency = $$props.currency;
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [name, id, handleUpsert, input_input_handler];
+    	return [
+    		name,
+    		amount,
+    		handleUpsert,
+    		id,
+    		input0_input_handler,
+    		input1_change_input_handler
+    	];
     }
 
     class DinnerForm extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance$2, create_fragment$2, safe_not_equal, { name: 0, id: 1 });
+    		init(this, options, instance$2, create_fragment$2, safe_not_equal, { name: 0, id: 3 });
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
@@ -3249,7 +3284,7 @@ var app = (function () {
     			console.warn("<DinnerForm> was created without expected prop 'name'");
     		}
 
-    		if (/*id*/ ctx[1] === undefined && !('id' in props)) {
+    		if (/*id*/ ctx[3] === undefined && !('id' in props)) {
     			console.warn("<DinnerForm> was created without expected prop 'id'");
     		}
     	}
@@ -3282,13 +3317,13 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (49:2) {#each balances as funds}
+    // (49:2) {#each assets as asset}
     function create_each_block(ctx) {
     	let fundsitem;
     	let current;
 
     	fundsitem = new FundsItem({
-    			props: { funds: /*funds*/ ctx[7] },
+    			props: { asset: /*asset*/ ctx[7] },
     			$$inline: true
     		});
 
@@ -3304,7 +3339,7 @@ var app = (function () {
     		},
     		p: function update(ctx, dirty) {
     			const fundsitem_changes = {};
-    			if (dirty & /*balances*/ 2) fundsitem_changes.funds = /*funds*/ ctx[7];
+    			if (dirty & /*assets*/ 2) fundsitem_changes.asset = /*asset*/ ctx[7];
     			fundsitem.$set(fundsitem_changes);
     		},
     		i: function intro(local) {
@@ -3325,7 +3360,7 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(49:2) {#each balances as funds}",
+    		source: "(49:2) {#each assets as asset}",
     		ctx
     	});
 
@@ -3348,7 +3383,7 @@ var app = (function () {
     	let t7;
     	let dinnerform;
     	let current;
-    	let each_value = /*balances*/ ctx[1];
+    	let each_value = /*assets*/ ctx[1];
     	validate_each_argument(each_value);
     	let each_blocks = [];
 
@@ -3388,11 +3423,11 @@ var app = (function () {
     			hr1 = element("hr");
     			t7 = space();
     			create_component(dinnerform.$$.fragment);
-    			add_location(small, file$1, 45, 14, 1059);
-    			add_location(h1, file$1, 45, 2, 1047);
-    			add_location(hr0, file$1, 46, 2, 1089);
-    			add_location(hr1, file$1, 55, 2, 1222);
-    			add_location(div, file$1, 44, 0, 1038);
+    			add_location(small, file$1, 45, 14, 1097);
+    			add_location(h1, file$1, 45, 2, 1085);
+    			add_location(hr0, file$1, 46, 2, 1127);
+    			add_location(hr1, file$1, 55, 2, 1258);
+    			add_location(div, file$1, 44, 0, 1076);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -3422,8 +3457,8 @@ var app = (function () {
     		p: function update(ctx, [dirty]) {
     			if (!current || dirty & /*id*/ 1) set_data_dev(t2, /*id*/ ctx[0]);
 
-    			if (dirty & /*balances, handleSetBalance*/ 10) {
-    				each_value = /*balances*/ ctx[1];
+    			if (dirty & /*assets, handleSetBalance*/ 10) {
+    				each_value = /*assets*/ ctx[1];
     				validate_each_argument(each_value);
     				let i;
 
@@ -3493,14 +3528,14 @@ var app = (function () {
     }
 
     function instance$1($$self, $$props, $$invalidate) {
-    	let balances;
+    	let assets;
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('UserDetails', slots, []);
     	const dispatch = createEventDispatcher();
 
     	function getDetails() {
     		return fetch(`/api/accounts/balance/${id}`).then(response => response.json()).then(s => {
-    			$$invalidate(4, balance = s);
+    			$$invalidate(4, accountBalance = s);
     		});
     	}
 
@@ -3509,7 +3544,7 @@ var app = (function () {
     	});
 
     	function handleAppend(event) {
-    		$$invalidate(4, balance = event.detail.amount);
+    		$$invalidate(4, accountBalance = event.detail.amount);
     	}
 
     	function handleSetBalance(event) {
@@ -3519,11 +3554,11 @@ var app = (function () {
     			method: "PUT",
     			headers: { "content-type": "application/json" }
     		}).then(response => response.json()).then(s => {
-    			$$invalidate(4, balance = s);
+    			$$invalidate(4, accountBalance = s);
     		});
     	}
 
-    	let balance = null;
+    	let accountBalance = null;
     	let { id } = $$props;
     	const writable_props = ['id'];
 
@@ -3544,15 +3579,15 @@ var app = (function () {
     		getDetails,
     		handleAppend,
     		handleSetBalance,
-    		balance,
+    		accountBalance,
     		id,
-    		balances
+    		assets
     	});
 
     	$$self.$inject_state = $$props => {
-    		if ('balance' in $$props) $$invalidate(4, balance = $$props.balance);
+    		if ('accountBalance' in $$props) $$invalidate(4, accountBalance = $$props.accountBalance);
     		if ('id' in $$props) $$invalidate(0, id = $$props.id);
-    		if ('balances' in $$props) $$invalidate(1, balances = $$props.balances);
+    		if ('assets' in $$props) $$invalidate(1, assets = $$props.assets);
     	};
 
     	if ($$props && "$$inject" in $$props) {
@@ -3560,12 +3595,12 @@ var app = (function () {
     	}
 
     	$$self.$$.update = () => {
-    		if ($$self.$$.dirty & /*balance*/ 16) {
-    			$$invalidate(1, balances = balance && balance.balances || []);
+    		if ($$self.$$.dirty & /*accountBalance*/ 16) {
+    			$$invalidate(1, assets = accountBalance && accountBalance.assets || []);
     		}
     	};
 
-    	return [id, balances, handleAppend, handleSetBalance, balance];
+    	return [id, assets, handleAppend, handleSetBalance, accountBalance];
     }
 
     class UserDetails extends SvelteComponentDev {

@@ -6,27 +6,27 @@
 
   function decreaseBalance() {
     dispatch("setBalance", {
-      currency: funds.currency,
-      amount: funds.amount - 100,
+      currency: asset.currency,
+      amount: asset.amount - 100,
     });
   }
 
   function increaseBalance() {
     dispatch("setBalance", {
-      currency: funds.currency,
-      amount: funds.amount + 100,
+      currency: asset.currency,
+      amount: asset.amount + 100,
     });
   }
 
   onMount(async () => {
-    console.log("funds", funds);
+    console.log("asset", asset);
   });
 
-  export let funds;
+  export let asset;
 </script>
 
 <div>
-  <h2>{funds.amount} <small>{funds.currency}</small></h2>
+  <h2>{asset.amount} <small>{asset.currency}</small></h2>
 
   <button on:click={decreaseBalance}> - </button>100
   <button on:click={increaseBalance}> + </button>

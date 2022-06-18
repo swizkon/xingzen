@@ -1,6 +1,6 @@
 ﻿namespace QianCash.Core;
 
-public class Funds
+public class CashAsset
 {
     public string? Currency { get; set; }
 

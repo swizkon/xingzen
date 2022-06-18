@@ -3,7 +3,7 @@
   import { createEventDispatcher } from "svelte";
 
   import FundsItem from "./FundsItem.svelte";
-  import DinnerForm from "./DinnerForm.svelte";
+  import DepositForm from "./DepositForm.svelte";
 
   const dispatch = createEventDispatcher();
 
@@ -11,7 +11,7 @@
     return fetch(`/api/accounts/balance/${id}`)
       .then((response) => response.json())
       .then((s) => {
-        balance = s;
+        accountBalance = s;
       });
   }
 
@@ -20,7 +20,7 @@
   });
 
   function handleAppend(event) {
-    balance = event.detail.amount;
+    accountBalance = event.detail.amount;
   }
   
   function handleSetBalance(event) {
@@ -31,13 +31,13 @@
     })
       .then((response) => response.json())
       .then((s) => {
-        balance = s;
+        accountBalance = s;
         
       });
   }
 
-  let balance = null;
-  $: balances = (balance && balance.balances) || [];
+  let accountBalance = null;
+  $: assets = (accountBalance && accountBalance.assets) || [];
 
   export let id;
 </script>
@@ -46,13 +46,13 @@
   <h1>Balance <small>({id})</small></h1>
   <hr />
 
-  {#each balances as funds}
+  {#each assets as asset}
     <FundsItem
-      {funds}
+      {asset}
       on:setBalance={handleSetBalance}
     />
   {/each}
 
   <hr />
-  <DinnerForm {id} on:append={handleAppend} />
+  <DepositForm {id} on:append={handleAppend} />
 </div>
