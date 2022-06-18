@@ -3,7 +3,6 @@
   import { apiData, spinners } from "../data/stores.js";
 
   import ImpersonateItem from "../Components/ImpersonateItem.svelte";
-  import SpinnerForm from "../Components/SpinnerForm.svelte";
 
   onMount(async () => {
     fetch("/api/accounts")
@@ -42,9 +41,6 @@
       on:delete={handleDelete}
     />
   {/each}
-
-  <hr />
-  <SpinnerForm on:append={handleAppend} />
 
 <style>
 
