@@ -20,7 +20,7 @@ public class AccountsController : ControllerBase
     [HttpGet]
     public IEnumerable<string> GetAccounts()
     {
-        return new [] {"jonas", "jenny"};
+        return new [] {"jonas2", "jenny2"};
     }
 
     [HttpGet("balance/{accountNumber}")]
